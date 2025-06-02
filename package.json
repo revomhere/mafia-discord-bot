@@ -1,0 +1,26 @@
+{
+  "name": "mafia-discord-bot",
+  "version": "1.0.0",
+  "description": "Notevsky Mafia Discord Bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "deploy-commands": "vite-node src/scripts/deploy-commands.ts",
+    "start-bot": "vite-node src/index.ts",
+    "dev": "npm run deploy-commands && npm run start-bot"
+  },
+  "keywords": [],
+  "author": "revom",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "dotenv-cli": "^8.0.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-node": "^3.1.4"
+  }
+}
