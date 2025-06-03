@@ -2,33 +2,33 @@
   "uk": {
     "roles": {
       "mafia": "Мафія",
-      "mafia-description": "Ти — **Мафія**. Вночі обирай, кого вбити разом з іншими мафіозі.",
+      "mafia-description": "Ти — **Мафія**. Вночі разом із іншими мафіозі обираєш жертву для вбивства. Твоя мета — ліквідувати всіх мирних жителів і залишитись непоміченим. Працюй у тіні, щоб контролювати гру, уникай підозр і маніпулюй голосуваннями вдень.",
       "don": "Дон",
-      "don-description": "Ти — **Дон**. Ти очолюєш мафію та можеш перевіряти гравців на роль комісара.",
+      "don-description": "Ти — **Дон**, лідер мафії. Крім звичайних дій Мафії, ти можеш вночі перевіряти інших гравців на роль комісара, щоб убезпечити свою команду від розкриття. Твоя стратегія має бути витонченою: використай свої можливості для усунення загроз і приведи Мафію до перемоги.",
       "citizen": "Мирний житель",
-      "citizen-description": "Ти — **Мирний житель**. Спробуй вирахувати мафію та вижити.",
+      "citizen-description": "Ти — **Мирний житель**. Не маючи спеціальних здібностей, твоя головна мета — вижити та виявити мафію. Спостерігай за поведінкою інших гравців, аналізуй голосування і прислухайся до підказок, щоб допомогти команді мирних здобути перемогу.",
       "commissar": "Комісар",
-      "commissar-description": "Ти — **Комісар**. Вночі ти перевіряєш гравців на роль мафії.",
+      "commissar-description": "Ти — **Комісар**. Кожної ночі ти можеш перевіряти одного гравця, щоб дізнатись, чи він є мафією. Використовуй цю інформацію мудро, повідомляй іншим мирним, але будь обережним, щоб тебе не викрили, інакше тебе можуть вбити наступної ночі.",
       "doctor": "Лікар",
-      "doctor-description": "Ти — **Лікар**. Вночі ти можеш врятувати когось від вбивства мафіозі.",
+      "doctor-description": "Ти — **Лікар**. Вночі ти можеш врятувати одного гравця від вбивства мафіозі. Обирай, кого захищати, враховуючи підозри і ризики. Твої рішення можуть змінити хід гри, зберігаючи життя важливих для мирної команди гравців.",
       "maniac": "Маніяк",
-      "maniac-description": "Ти — **Маніяк**. Твоя мета — вбити всіх гравців. Перемагаєш, якщо залишишся єдиним живим."
+      "maniac-description": "Ти — **Маніяк**. Твоя ціль — вбити всіх інших гравців, незалежно від їх ролей. Ти дієш самостійно і не маєш союзників. Обережно балансуй між нападом і прихованням, щоб залишитись останнім живим та виграти гру."
     }
   },
   "en": {
     "roles": {
       "mafia": "Mafia",
-      "mafia-description": "You are **Mafia**. At night, choose who to kill with other mafias.",
+      "mafia-description": "You are **Mafia**. At night, you collaborate with other mafia members to choose a target to eliminate. Your goal is to secretly remove all the citizens while avoiding suspicion. Work in the shadows, manipulate voting during the day, and keep your identity hidden to secure a win for your team.",
       "don": "Don",
-      "don-description": "You are **Don**. You lead the mafia and can check players for the commissioner role.",
+      "don-description": "You are the **Don**, the leader of the mafia. Besides the regular mafia actions, you have the special ability to check if a player is the commissioner during the night. Use this power strategically to protect your team from being exposed and to eliminate threats. Lead the mafia wisely to victory.",
       "citizen": "Citizen",
-      "citizen-description": "You are **Citizen**. Try to figure out the mafia and survive.",
+      "citizen-description": "You are a **Citizen**. Without any special abilities, your primary goal is to survive and identify the mafia members. Pay attention to player behavior, analyze votes, and collaborate with other citizens to uncover the mafia and win the game.",
       "commissar": "Commissioner",
-      "commissar-description": "You are **Commissioner**. At night, you check players for the mafia role.",
+      "commissar-description": "You are the **Commissioner**. Each night, you can investigate one player to learn whether they belong to the mafia. Use this information carefully to inform the citizens, but be cautious to avoid revealing yourself, as the mafia may target you next.",
       "doctor": "Doctor",
-      "doctor-description": "You are **Doctor**. At night, you can save someone from being killed by the mafia.",
+      "doctor-description": "You are the **Doctor**. Each night, you have the ability to save one player from being killed by the mafia. Choose wisely whom to protect, considering suspicions and threats. Your decisions can change the course of the game by preserving key citizens.",
       "maniac": "Maniac",
-      "maniac-description": "You are **Maniac**. Your goal is to kill all players. You win if you are the last one alive."
+      "maniac-description": "You are the **Maniac**. Your goal is to kill all other players, regardless of their roles. You work alone with no allies. Balance your attacks and concealment carefully to be the last player alive and claim victory."
     }
   }
 }
