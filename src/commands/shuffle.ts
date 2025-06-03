@@ -114,9 +114,11 @@ export default {
         return (
           roleEmojis[user.role] +
           ' ' +
+          roleNames[user.role] +
+          ' ' +
           getNicknameNumber(idx + 1) +
           ' - ' +
-          `${user.player.username} (${roleNames[user.role]})`
+          `${user.player.username}`
         );
       })
       .join('\n');
