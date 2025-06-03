@@ -3,9 +3,11 @@ import '@/setup';
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import { getCommands } from '@/helpers';
 import { Command } from '@/types';
+import config from '@/config';
+import { t } from '@/i18n';
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]
 }) as Client & {
   commands?: Collection<string, Command>;
 };
@@ -49,4 +51,4 @@ client.on(Events.InteractionCreate, interaction => {
   }
 });
 
-client.login(process.env.PRIVATE_TOKEN);
+client.login(config.privateToken);

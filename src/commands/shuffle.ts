@@ -1,36 +1,23 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, ChannelType } from 'discord.js';
 import { handleError } from '@/helpers';
-// import {
-//   addUsers,
-//   excludeMafiaMembers,
-//   getShuffledRoles,
-//   privateLog,
-//   publicLog,
-//   assignNumbers,
-//   dmRoles
-// } from '@/helpers';
+import config from '@/config';
+import { t } from '@/i18n';
 
 const COUNT_OF_EXCLUDED_USERS = 20; // Number of users to exclude from shuffling
 
 export default {
-  data: new SlashCommandBuilder()
-    .setDescription(
-      'Перемішує гравців в Мафію. Для виключення гравців з перемішування використовуйте параметри команди.'
-    )
-    .addUsers(COUNT_OF_EXCLUDED_USERS),
+  data: new SlashCommandBuilder().setDescription(t('commands.shuffle.description')).addUsers(COUNT_OF_EXCLUDED_USERS),
 
-  async execute(interaction: ChatInputCommandInteraction) {
+  execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.memberPermissions?.has('Administrator'))
-      return handleError(
-        interaction,
-        'Ви не маєте прав адміністратора для виконання цієї команди.'
-      );
+      return handleError(interaction, t('errors.no-admin-role'));
 
-    const channel = interaction.channel;
+    const channel = interaction.guild?.channels?.cache?.get(config.channelId);
 
-    return handleError(
-      interaction,
-      'Ця команда тимчасово недоступна. Будь ласка, спробуйте пізніше.'
-    );
+    if (!channel || channel.type !== ChannelType.GuildVoice)
+      return handleError(interaction, t('errors.no-channel-or-not-voice'));
+
+    const allUsers = channel.members.map(member => member.user);
+    if (!allUsers) return handleError(interaction, t('errors.cant-get-users'));
   }
 };

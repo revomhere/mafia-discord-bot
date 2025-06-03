@@ -1,0 +1,12 @@
+{
+  "uk": {
+    "shuffle": {
+      "description": "Перемішує гравців в Мафію. Для виключення гравців з перемішування використовуйте параметри команди."
+    }
+  },
+  "en": {
+    "shuffle": {
+      "description": "Shuffles players in Mafia. Use command parameters to exclude players from shuffling."
+    }
+  }
+}
