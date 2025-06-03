@@ -126,7 +126,7 @@ export default {
 
     const messageToAuthor = new EmbedBuilder()
       .setTitle(t('commands.shuffle.author.title'))
-      .setColor(0x00ff00)
+      .setColor(0x2ecc71) // #2ECC71
       .setDescription(logMessage);
 
     await interaction.user.send({
@@ -149,7 +149,7 @@ export default {
 
     const response = new EmbedBuilder()
       .setTitle(t('commands.shuffle.result.title'))
-      .setColor(0x00ff00)
+      .setColor(0x2ecc71) // #2ECC71
       .setDescription(replyMessage);
 
     return interaction.editReply({

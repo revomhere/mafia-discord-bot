@@ -37,10 +37,10 @@ export const roleDescriptions: Record<MafiaRole, string> = {
 };
 
 export const roleColors: Record<MafiaRole, number> = {
-  [MafiaRole.MAFIA]: 0x000000, // #000000
-  [MafiaRole.DON]: 0xffd700, // #FFD700
-  [MafiaRole.CITIZEN]: 0xff0000, // #FF0000
-  [MafiaRole.COMMISSAR]: 0x0000ff, // #0000FF
-  [MafiaRole.DOCTOR]: 0x00ffff, // #00FFFF
-  [MafiaRole.MANIAC]: 0x800080 // #800080
+  [MafiaRole.MAFIA]: 0x1a1a1a, // #1A1A1A
+  [MafiaRole.DON]: 0xc5a200, // #C5A200
+  [MafiaRole.CITIZEN]: 0xcc3333, // #CC3333
+  [MafiaRole.COMMISSAR]: 0x3366cc, // #3366CC
+  [MafiaRole.DOCTOR]: 0x2aa198, // #2AA198
+  [MafiaRole.MANIAC]: 0x6a0dad // #6A0DAD
 };
