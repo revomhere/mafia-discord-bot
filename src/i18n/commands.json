@@ -4,14 +4,17 @@
       "description": "Перемішує гравців в Мафію. Для виключення гравців з перемішування використовуйте параметри команди.",
       "change-nickname": "Зміна імени користувача для гри в Мафію.",
       "dm": {
-        "title": "{emoji} Твоя роль у грі: {role}",
-        "footer": "Гра розпочата о {time} користувачем {user}. Удачі!"
+        "title": "{{emoji}} Твоя роль у грі: {{role}}",
+        "footer": "Гра розпочата о {{time}} користувачем {{user}}. Удачі!"
+      },
+      "author": {
+        "title": "Ведучий: Ролі гравців в Мафію"
       },
       "result": {
         "title": "Гру розпочато!",
         "description": "Гравці перемішані. Ролі можна побачити в особистих повідомленнях.",
-        "failed-dm": "Не вдалося надіслати особисті повідомлення гравцю {user}. Надайте йому роль вручну.",
-        "failed-nickname": "Не вдалося змінити ім'я користувача гравця {user} на {nickname}. Змініть роль вручну."
+        "failed-dm": "❗ Не вдалося надіслати особисті повідомлення гравцю {{user}}. Надайте йому роль вручну.",
+        "failed-nickname": "❗ Не вдалося змінити ім'я користувача гравця {{user}} на {{nickname}}. Змініть роль вручну."
       }
     }
   },
@@ -20,14 +23,17 @@
       "description": "Shuffles players in Mafia. Use command parameters to exclude players from shuffling.",
       "change-nickname": "Change username for playing Mafia.",
       "dm": {
-        "title": "{emoji} Your role in the game: {role}",
-        "footer": "Game started at {time} by user {user}. Good luck!"
+        "title": "{{emoji}} Your role in the game: {{role}}",
+        "footer": "Game started at {{time}} by user {{user}}. Good luck!"
+      },
+      "author": {
+        "title": "Host: Player Roles in Mafia"
       },
       "result": {
         "title": "Game started!",
         "description": "Players shuffled. Roles can be seen in direct messages.",
-        "failed-dm": "Failed to send direct message to player {user}. Assign their role manually.",
-        "failed-nickname": "Failed to change username of player {user} to {nickname}. Change their role manually."
+        "failed-dm": "❗ Failed to send direct message to player {{user}}. Assign their role manually.",
+        "failed-nickname": "❗ Failed to change username of player {{user}} to {{nickname}}. Change their role manually."
       }
     }
   }

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, ChannelType, EmbedBuilder } from 'discord.js';
-import { handleError, getMafiaRolesArray, getNicknameNumber } from '@/helpers';
+import { handleError, getMafiaRolesArray, getNicknameNumber, channelLog } from '@/helpers';
 import { roleEmojis, roleColors, roleDescriptions, roleNames } from '@/enums';
 import { CompleteUser } from '@/types';
 import { shuffle } from 'lodash-es';
@@ -31,7 +31,7 @@ const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUs
             minute: '2-digit',
             hour12: false
           }),
-          user: `<@${interaction.user.id}>`
+          user: interaction.user.username
         })
       });
 
@@ -47,19 +47,17 @@ const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUs
 
 // returns user if failed to change nickname
 const changeNickname = async (interaction: ChatInputCommandInteraction, user: CompleteUser, number: number) => {
+  const newNickname = getNicknameNumber(number + 1);
+  const member = interaction.guild?.members.cache.get(user.player.id);
+
+  if (!member) {
+    console.error(`Member not found for user ${user.player.username}`);
+    return user.player;
+  }
+
   try {
-    const newNickname = getNicknameNumber(number + 1);
-    const member = interaction.guild?.members.cache.get(user.player.id);
-
-    if (!member) {
-      console.error(`Member not found for user ${user.player.username}`);
-      return user.player;
-    }
-
     await member.setNickname(newNickname, t('commands.shuffle.change-nickname'));
   } catch (e) {
-    console.error(`Failed to change username for ${user.player.username}: `, e);
-
     return user.player;
   }
 };
@@ -70,6 +68,8 @@ export default {
     .addExcludededUsers(COUNT_OF_EXCLUDED_USERS),
 
   async execute(interaction: ChatInputCommandInteraction) {
+    await interaction.deferReply();
+
     if (!interaction.memberPermissions?.has('Administrator'))
       return handleError(interaction, t('errors.no-admin-role'));
 
@@ -88,7 +88,7 @@ export default {
       .map(user => user?.id);
     excludedUsersIds.push(interaction.user.id);
 
-    const players = shuffle(allUsers.filter(user => !excludedUsersIds.includes(user.id)));
+    const players = allUsers.filter(user => !excludedUsersIds.includes(user.id));
     if (!players.length) return handleError(interaction, t('errors.no-players'));
     if (players.length < MIN_PLAYERS)
       return handleError(interaction, t('errors.not-enough-players', { min: MIN_PLAYERS }));
@@ -110,26 +110,49 @@ export default {
     );
     const failedNicknameChanges = nicknameChanges.filter(Boolean);
 
-    const description =
+    const logMessage = playersWithRoles
+      .map((user, idx) => {
+        return (
+          roleEmojis[user.role] +
+          ' ' +
+          getNicknameNumber(idx + 1) +
+          ' - ' +
+          `${user.player.username} (${roleNames[user.role]})`
+        );
+      })
+      .join('\n');
+
+    await channelLog(interaction, logMessage);
+
+    const messageToAuthor = new EmbedBuilder()
+      .setTitle(t('commands.shuffle.author.title'))
+      .setColor(0x00ff00)
+      .setDescription(logMessage);
+
+    await interaction.user.send({
+      embeds: [messageToAuthor]
+    });
+
+    const replyMessage =
       t('commands.shuffle.result.description') +
-      failedDms.map(user => '\n' + t('commands.shuffle.result.failed-dm', { user: `<@${user?.id}>` })) +
+      failedDms.map(user => '\n' + t('commands.shuffle.result.failed-dm', { user: user?.username })) +
       failedNicknameChanges.map(
         user =>
           '\n' +
           t('commands.shuffle.result.failed-nickname', {
-            user: `<@${user?.id}>`,
+            user: `${user?.username}`,
             nickname: getNicknameNumber(playersWithRoles.findIndex(u => u.player.id === user?.id) + 1)
           })
       ) +
       '\n\n' +
-      playersWithRoles.map((user, idx) => `<@${user.player.id}>: ${getNicknameNumber(idx + 1)}`).join('\n');
+      playersWithRoles.map((user, idx) => `${user.player.username}: ${getNicknameNumber(idx + 1)}`).join('\n');
 
     const response = new EmbedBuilder()
       .setTitle(t('commands.shuffle.result.title'))
       .setColor(0x00ff00)
-      .setDescription(description);
+      .setDescription(replyMessage);
 
-    await interaction.reply({
+    return interaction.editReply({
       embeds: [response]
     });
   }

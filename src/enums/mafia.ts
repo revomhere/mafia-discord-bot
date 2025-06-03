@@ -10,7 +10,7 @@ export enum MafiaRole {
 }
 
 export const roleEmojis: Record<MafiaRole, string> = {
-  [MafiaRole.MAFIA]: '🦹‍♂️',
+  [MafiaRole.MAFIA]: '🥷🏻',
   [MafiaRole.DON]: '👑',
   [MafiaRole.CITIZEN]: '👤',
   [MafiaRole.COMMISSAR]: '👮‍♂️',
