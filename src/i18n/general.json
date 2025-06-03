@@ -1,0 +1,34 @@
+{
+  "uk": {
+    "roles": {
+      "mafia": "Мафія",
+      "mafia-description": "Ти — **Мафія**. Вночі обирай, кого вбити разом з іншими мафіозі.",
+      "don": "Дон",
+      "don-description": "Ти — **Дон**. Ти очолюєш мафію та можеш перевіряти гравців на роль комісара.",
+      "citizen": "Мирний житель",
+      "citizen-description": "Ти — **Мирний житель**. Спробуй вирахувати мафію та вижити.",
+      "commissar": "Комісар",
+      "commissar-description": "Ти — **Комісар**. Вночі ти перевіряєш гравців на роль мафії.",
+      "doctor": "Лікар",
+      "doctor-description": "Ти — **Лікар**. Вночі ти можеш врятувати когось від вбивства мафіозі.",
+      "maniac": "Маніяк",
+      "maniac-description": "Ти — **Маніяк**. Твоя мета — вбити всіх гравців. Перемагаєш, якщо залишишся єдиним живим."
+    }
+  },
+  "en": {
+    "roles": {
+      "mafia": "Mafia",
+      "mafia-description": "You are **Mafia**. At night, choose who to kill with other mafias.",
+      "don": "Don",
+      "don-description": "You are **Don**. You lead the mafia and can check players for the commissioner role.",
+      "citizen": "Citizen",
+      "citizen-description": "You are **Citizen**. Try to figure out the mafia and survive.",
+      "commissar": "Commissioner",
+      "commissar-description": "You are **Commissioner**. At night, you check players for the mafia role.",
+      "doctor": "Doctor",
+      "doctor-description": "You are **Doctor**. At night, you can save someone from being killed by the mafia.",
+      "maniac": "Maniac",
+      "maniac-description": "You are **Maniac**. Your goal is to kill all players. You win if you are the last one alive."
+    }
+  }
+}

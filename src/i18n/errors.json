@@ -1,12 +1,18 @@
 {
   "uk": {
+    "default": "❌ Помилка",
     "no-admin-role": "Ви не маєте прав адміністратора для виконання цієї команди.",
     "no-channel-or-not-voice": "Канал для перемішування гравців не знайдено або він не є голосовим каналом.",
-    "cant-get-users": "Не вдалося отримати користувачів з каналу."
+    "cant-get-users": "Не вдалося отримати користувачів з каналу.",
+    "no-players": "Не знайдено гравців.",
+    "not-enough-players": "Для початку гри потрібно мінімум {min} гравців."
   },
   "en": {
+    "default": "❌ Error",
     "no-admin-role": "You do not have admin rights to execute this command.",
     "no-channel-or-not-voice": "The channel for shuffling players was not found or it is not a voice channel.",
-    "cant-get-users": "Could not retrieve users from the channel."
+    "cant-get-users": "Could not retrieve users from the channel.",
+    "no-players": "No players found.",
+    "not-enough-players": "At least {min} players are required to start the game."
   }
 }

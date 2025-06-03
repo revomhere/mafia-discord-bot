@@ -15,9 +15,11 @@
   "dependencies": {
     "discord.js": "^14.19.3",
     "dotenv": "^16.5.0",
-    "i18next": "^25.2.1"
+    "i18next": "^25.2.1",
+    "lodash-es": "^4.17.21"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.15.29",
     "dotenv-cli": "^8.0.0",
     "typescript": "^5.8.3",

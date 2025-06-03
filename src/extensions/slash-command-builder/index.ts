@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { addUsers } from './methods';
+import { addExcludededUsers } from './methods';
 
 declare module 'discord.js' {
   interface SlashCommandBuilder {
-    addUsers(countOfExcludedUsers: number): this;
+    addExcludededUsers(countOfExcludedUsers: number): this;
   }
 }
 
-SlashCommandBuilder.prototype.addUsers = addUsers;
+SlashCommandBuilder.prototype.addExcludededUsers = addExcludededUsers;

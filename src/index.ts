@@ -4,7 +4,6 @@ import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import { getCommands } from '@/helpers';
 import { Command } from '@/types';
 import config from '@/config';
-import { t } from '@/i18n';
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]

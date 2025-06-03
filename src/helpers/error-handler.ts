@@ -1,16 +1,22 @@
+import { t } from '@/i18n';
 import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 
-export const handleError = async (interaction: ChatInputCommandInteraction, error: string) => {
+type Options = {
+  isPublic?: boolean;
+  channelId?: string;
+};
+
+export const handleError = async (interaction: ChatInputCommandInteraction, error: string, options?: Options) => {
   console.error(`${new Date()}: Error - ${error}`);
 
   const embed = new EmbedBuilder()
-    .setTitle('❌ Помилка')
+    .setTitle(t('errors.default'))
     .setDescription(error)
     .setColor(0xff4c4c) // Red color
     .setTimestamp();
 
   return await interaction.reply({
     embeds: [embed],
-    flags: MessageFlags.Ephemeral
+    flags: options?.isPublic ? undefined : MessageFlags.Ephemeral
   });
 };
