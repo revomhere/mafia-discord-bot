@@ -1,0 +1,6 @@
+{
+  "shuffle": {
+    "countOfExcludedPlayers": 10,
+    "minPlayers": 4
+  }
+}

@@ -6,8 +6,7 @@ import { shuffle } from 'lodash-es';
 import config from '@/config';
 import { t } from '@/i18n';
 
-const COUNT_OF_EXCLUDED_USERS = 10;
-const MIN_PLAYERS = 4;
+const { countOfExcludedPlayers, minPlayers } = config.shuffle;
 
 // returns user if failed to send DM
 const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUser) => {
@@ -65,7 +64,7 @@ const changeNickname = async (interaction: ChatInputCommandInteraction, user: Co
 export default {
   data: new SlashCommandBuilder()
     .setDescription(t('commands.shuffle.description'))
-    .addExcludededUsers(COUNT_OF_EXCLUDED_USERS),
+    .addExcludededUsers(countOfExcludedPlayers),
 
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
@@ -81,7 +80,7 @@ export default {
     const allUsers = channel.members.map(member => member.user);
     if (!allUsers) return handleError(interaction, t('errors.cant-get-users'));
 
-    const excludedUsersIds = Array.from({ length: COUNT_OF_EXCLUDED_USERS }, (_, i) =>
+    const excludedUsersIds = Array.from({ length: countOfExcludedPlayers }, (_, i) =>
       interaction.options.getUser(`user-to-exclude-${i + 1}`)
     )
       .filter(Boolean)
@@ -90,8 +89,8 @@ export default {
 
     const players = allUsers.filter(user => !excludedUsersIds.includes(user.id));
     if (!players.length) return handleError(interaction, t('errors.no-players'));
-    if (players.length < MIN_PLAYERS)
-      return handleError(interaction, t('errors.not-enough-players', { min: MIN_PLAYERS }));
+    if (players.length < minPlayers)
+      return handleError(interaction, t('errors.not-enough-players', { min: minPlayers }));
 
     const roles = getMafiaRolesArray(players.length);
 

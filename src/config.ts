@@ -1,3 +1,5 @@
+import jsonConfig from '@/../public/config.json';
+
 const config = {
   appId: process.env.APP_ID || '',
   privateToken: process.env.PRIVATE_TOKEN || '',
@@ -8,7 +10,9 @@ const config = {
   errorChannelId: process.env.ERROR_CHANNEL_ID || '',
 
   logGuildId: process.env.LOG_GUILD_ID || '',
-  logChannelId: process.env.LOG_CHANNEL_ID || ''
+  logChannelId: process.env.LOG_CHANNEL_ID || '',
+
+  ...jsonConfig
 };
 
 export default config;
