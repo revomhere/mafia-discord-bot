@@ -1,19 +1,23 @@
-import { handleError, getMafiaRolesArray, getNicknameNumber, channelLog, dmRole, changeNickname } from '@/helpers';
+import {
+  handleError,
+  getMafiaRolesArray,
+  channelLog,
+  dmRole,
+  changeNickname,
+  handleDmError,
+  generatePrivateLogMessage,
+  generatePublicLogMessage
+} from '@/helpers';
 import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
   ChannelType,
-  EmbedBuilder,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
-  User,
-  PermissionsBitField,
-  ButtonInteraction
+  User
 } from 'discord.js';
-import { roleEmojis, roleNames } from '@/enums';
-import { CompleteUser } from '@/types';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
 import { t } from '@/i18n';
@@ -137,131 +141,33 @@ async function startExclusionFlow(interaction: ChatInputCommandInteraction, allU
 
 async function runShuffleLogic(interaction: ChatInputCommandInteraction, allUsers: User[], excludedUserIds: string[]) {
   const players = allUsers.filter(user => !excludedUserIds.includes(user.id));
+
   if (!players.length) return handleError(interaction, t('errors.no-players'));
   if (players.length < minPlayers) return handleError(interaction, t('errors.not-enough-players', { min: minPlayers }));
 
   const roles = getMafiaRolesArray(players.length);
 
-  const playersWithRoles: CompleteUser[] = shuffle(
-    players.map((player, idx) => ({
-      player,
-      role: roles[idx]
-    }))
-  );
+  const playersWithRoles = shuffle(players.map((player, idx) => ({ player, role: roles[idx] })));
 
   const [dms, nicknameChanges] = await Promise.all([
     Promise.all(playersWithRoles.map(user => dmRole(interaction, user))),
     Promise.all(playersWithRoles.map((user, idx) => changeNickname(interaction, user, idx)))
   ]);
 
-  const failedDms = dms.filter(Boolean);
-  const failedNicknameChanges = nicknameChanges.filter(Boolean);
+  const failedDms = dms.filter(user => user !== undefined);
+  const failedNicknameChanges = nicknameChanges.filter(user => user !== undefined);
 
-  if (failedDms.length) {
-    await Promise.all(
-      failedDms.map(async user => {
-        if (!user) return;
-
-        const channel = await interaction.guild?.channels.create({
-          name: `Role-${interaction.user.username}`,
-          type: ChannelType.GuildText,
-          permissionOverwrites: [
-            {
-              id: interaction.guild.roles.everyone.id,
-              deny: [PermissionsBitField.Flags.ViewChannel]
-            },
-            {
-              id: user.id,
-              allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory]
-            }
-          ]
-        });
-
-        if (!channel) return;
-
-        const confirmButton = new ButtonBuilder()
-          .setCustomId(`confirm_got_role_${user.id}`)
-          .setLabel(t('commands.start.dm.got-role'))
-          .setStyle(ButtonStyle.Success);
-
-        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirmButton);
-
-        const message = await channel.send({
-          content: `<@${user.id}>`,
-          embeds: [user.embedMessage],
-          components: [row],
-          allowedMentions: { users: [user.id], roles: [] }
-        });
-
-        const collector = message.createMessageComponentCollector({
-          componentType: ComponentType.Button,
-          time: 3 * 60 * 1000, // 3 хвилини
-          filter: (i: ButtonInteraction) => i.user.id === user.id
-        });
-
-        let acknowledged = false;
-
-        collector.on('collect', async i => {
-          acknowledged = true;
-          await i.deferUpdate();
-          await channel.delete().catch(() => {});
-        });
-
-        collector.on('end', async () => {
-          if (!acknowledged) {
-            setTimeout(() => {
-              channel.delete().catch(() => {});
-            }, 1000); // маленька пауза перед видаленням
-          }
-        });
-      })
-    );
-  }
-
-  const logMessage = playersWithRoles
-    .map((user, idx) => {
-      return (
-        roleEmojis[user.role] +
-        ' ' +
-        roleNames[user.role] +
-        ' ' +
-        getNicknameNumber(idx + 1) +
-        ' - ' +
-        `${user.player.username}`
-      );
-    })
-    .join('\n');
-
-  const messageToAuthor = new EmbedBuilder()
-    .setTitle(t('commands.start.author.title'))
-    .setColor(0x2ecc71)
-    .setDescription(logMessage);
+  const { message: logMessage, embed: messageToAuthor } = generatePrivateLogMessage(playersWithRoles);
 
   await Promise.all([
+    handleDmError(interaction, failedDms),
     channelLog(interaction, logMessage),
     interaction.user.send({
       embeds: [messageToAuthor]
     })
   ]);
 
-  const replyMessage =
-    t('commands.start.result.description') +
-    failedDms.map(user => '\n' + t('commands.start.result.failed-dm', { user: user?.username })) +
-    failedNicknameChanges.map(
-      user =>
-        '\n' +
-        t('commands.start.result.failed-nickname', {
-          user: `${user?.username}`,
-          nickname: getNicknameNumber(playersWithRoles.findIndex(u => u.player.id === user?.id) + 1)
-        })
-    ) +
-    '\n\n' +
-    playersWithRoles.map((user, idx) => `${user.player.username}: ${getNicknameNumber(idx + 1)}`).join('\n');
-
-  const response = new EmbedBuilder()
-    .setTitle(t('commands.start.result.title'))
-    .setColor(0x2ecc71)
-    .setDescription(replyMessage);
+  const response = generatePublicLogMessage(playersWithRoles, failedDms, failedNicknameChanges);
 
   if (interaction.channel && 'send' in interaction.channel) {
     try {

@@ -1,4 +1,5 @@
 export * from './get-files';
+export * from './message-generator';
 export * from './utilities';
 export * from './error-handler';
 export * from './mafia-roles';

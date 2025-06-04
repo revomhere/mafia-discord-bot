@@ -1,33 +1,22 @@
-import { roleEmojis, roleNames, roleDescriptions, roleColors } from '@/enums';
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import { getNicknameNumber } from './';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  ButtonStyle,
+  ChannelType,
+  ChatInputCommandInteraction,
+  ComponentType,
+  EmbedBuilder,
+  PermissionsBitField,
+  User
+} from 'discord.js';
+import { generateDmMessage, getNicknameNumber } from './';
 import { CompleteUser } from '@/types';
 import { t } from '@/i18n';
 
 // returns user if failed to send DM
 export const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUser) => {
-  const embed = new EmbedBuilder()
-    .setTitle(
-      t('commands.start.dm.title', {
-        emoji: roleEmojis[user.role],
-        role: roleNames[user.role]
-      })
-    )
-    .setDescription(roleDescriptions[user.role])
-    .setColor(roleColors[user.role])
-    .setFooter({
-      text: t('commands.start.dm.footer', {
-        time: new Date().toLocaleTimeString('uk-UA', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        }),
-        user: interaction.user.username
-      })
-    });
+  const embed = generateDmMessage(user.role, interaction.user.username);
 
   try {
     await user.player.send({
@@ -37,7 +26,7 @@ export const dmRole = async (interaction: ChatInputCommandInteraction, user: Com
     console.error(`Failed to send DM to ${user.player.username}: `, e);
 
     return {
-      ...user.player,
+      user: user.player,
       embedMessage: embed
     };
   }
@@ -58,4 +47,73 @@ export const changeNickname = async (interaction: ChatInputCommandInteraction, u
   } catch (e) {
     return user.player;
   }
+};
+
+export const handleDmError = async (
+  interaction: ChatInputCommandInteraction,
+  failedDms: {
+    user: User;
+    embedMessage: EmbedBuilder;
+  }[]
+) => {
+  if (failedDms.length === 0) return;
+
+  await Promise.all(
+    failedDms.map(async dm => {
+      if (!dm) return;
+
+      const channel = await interaction.guild?.channels.create({
+        name: `role-${dm.user.username}`,
+        type: ChannelType.GuildText,
+        permissionOverwrites: [
+          {
+            id: interaction.guild.roles.everyone.id,
+            deny: [PermissionsBitField.Flags.ViewChannel]
+          },
+          {
+            id: dm.user.id,
+            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory]
+          }
+        ]
+      });
+
+      if (!channel) return;
+
+      const confirmButton = new ButtonBuilder()
+        .setCustomId(`confirm_got_role_${dm.user.id}`)
+        .setLabel(t('commands.start.dm.got-role'))
+        .setStyle(ButtonStyle.Success);
+
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirmButton);
+
+      const message = await channel.send({
+        content: `<@${dm.user.id}>`,
+        embeds: [dm.embedMessage],
+        components: [row],
+        allowedMentions: { users: [dm.user.id], roles: [] }
+      });
+
+      const collector = message.createMessageComponentCollector({
+        componentType: ComponentType.Button,
+        time: 3 * 60 * 1000, // 3 min
+        filter: (i: ButtonInteraction) => i.user.id === dm.user.id
+      });
+
+      let acknowledged = false;
+
+      collector.on('collect', async i => {
+        acknowledged = true;
+        await i.deferUpdate();
+        await channel.delete().catch(() => {});
+      });
+
+      collector.on('end', async () => {
+        if (!acknowledged) {
+          setTimeout(() => {
+            channel.delete().catch(() => {});
+          }, 1000);
+        }
+      });
+    })
+  );
 };
