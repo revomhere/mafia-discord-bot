@@ -50,4 +50,6 @@ client.on(Events.InteractionCreate, interaction => {
   }
 });
 
+console.log(config.guildId);
+
 client.login(config.privateToken);

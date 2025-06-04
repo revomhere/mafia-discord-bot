@@ -7,7 +7,9 @@
   "scripts": {
     "deploy-commands": "vite-node src/scripts/deploy-commands.ts",
     "start-bot": "vite-node src/index.ts",
-    "dev": "npm run deploy-commands && npm run start-bot"
+    "start": "npm run deploy-commands && npm run start-bot",
+    "deploy-dev": "vite-node src/scripts/deploy-commands.ts && vite-node src/index.ts",
+    "dev": "dotenv -e .env.dev -- npm run deploy-dev"
   },
   "keywords": [],
   "author": "revom",
