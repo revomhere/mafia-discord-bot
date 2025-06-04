@@ -1,8 +1,17 @@
 {
   "uk": {
-    "shuffle": {
-      "description": "Перемішує гравців в Мафію. Для виключення гравців з перемішування використовуйте параметри команди.",
-      "change-nickname": "Зміна імени користувача для гри в Мафію.",
+    "start": {
+      "description": "Перемішує гравців в Мафію.",
+      "change-nickname": "Зміна імені користувача для гри в Мафію.",
+      "choose": {
+        "description": "Спочатку всі гравці в грі. Натискайте кнопки, щоб виключити/повернути гравця. Коли готові — натисніть \"{{button}}\"",
+        "start-btn": "Почати гру",
+        "cancel-btn": "Скасувати гру",
+        "game-cancelled": "Гру скасовано.",
+        "game-starting": "Гра розпочинається...",
+        "time-is-gone": "Час для вибору гравців вичерпано.",
+        "buttons-not-for-you": "Ці кнопки не для вас. Ви не можете виключати інших гравців."
+      },
       "dm": {
         "title": "{{emoji}} Твоя роль у грі: {{role}}",
         "footer": "Гра розпочата о {{time}} користувачем {{user}}. Удачі!"
@@ -19,9 +28,18 @@
     }
   },
   "en": {
-    "shuffle": {
+    "start": {
       "description": "Shuffles players in Mafia. Use command parameters to exclude players from shuffling.",
       "change-nickname": "Change username for playing Mafia.",
+      "choose": {
+        "description": "All players are in the game. Click buttons to exclude/return a player. When ready, click \"{{button}}\"",
+        "start-btn": "Start Game",
+        "cancel-btn": "Cancel Game",
+        "game-cancelled": "Game cancelled.",
+        "game-starting": "Game is starting...",
+        "time-is-gone": "Time for player selection is over.",
+        "buttons-not-for-you": "These buttons are not for you. You cannot exclude other players."
+      },
       "dm": {
         "title": "{{emoji}} Your role in the game: {{role}}",
         "footer": "Game started at {{time}} by user {{user}}. Good luck!"

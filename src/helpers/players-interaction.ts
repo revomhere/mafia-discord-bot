@@ -9,7 +9,7 @@ export const dmRole = async (interaction: ChatInputCommandInteraction, user: Com
   try {
     const embed = new EmbedBuilder()
       .setTitle(
-        t('commands.shuffle.dm.title', {
+        t('commands.start.dm.title', {
           emoji: roleEmojis[user.role],
           role: roleNames[user.role]
         })
@@ -17,7 +17,7 @@ export const dmRole = async (interaction: ChatInputCommandInteraction, user: Com
       .setDescription(roleDescriptions[user.role])
       .setColor(roleColors[user.role])
       .setFooter({
-        text: t('commands.shuffle.dm.footer', {
+        text: t('commands.start.dm.footer', {
           time: new Date().toLocaleTimeString('uk-UA', {
             day: '2-digit',
             month: '2-digit',
@@ -51,7 +51,7 @@ export const changeNickname = async (interaction: ChatInputCommandInteraction, u
   }
 
   try {
-    await member.setNickname(newNickname, t('commands.shuffle.change-nickname'));
+    await member.setNickname(newNickname, t('commands.start.change-nickname'));
   } catch (e) {
     return user.player;
   }

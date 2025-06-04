@@ -2,7 +2,7 @@ import { t } from '@/i18n';
 import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags } from 'discord.js';
 
 export const handleError = async (interaction: ChatInputCommandInteraction, error: string) => {
-  console.error(`${new Date()}: Error - ${error}`);
+  console.error(`${new Date()}::/${interaction.command?.name}:: Error - ${error}`);
 
   const embed = new EmbedBuilder()
     .setTitle(t('errors.default'))
