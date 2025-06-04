@@ -48,12 +48,12 @@ export default {
       }))
     );
 
-    const dms = await Promise.all(playersWithRoles.map(user => dmRole(interaction, user)));
-    const failedDms = dms.filter(Boolean);
+    const [dms, nicknameChanges] = await Promise.all([
+      Promise.all(playersWithRoles.map(user => dmRole(interaction, user))),
+      Promise.all(playersWithRoles.map((user, idx) => changeNickname(interaction, user, idx)))
+    ]);
 
-    const nicknameChanges = await Promise.all(
-      playersWithRoles.map((user, idx) => changeNickname(interaction, user, idx))
-    );
+    const failedDms = dms.filter(Boolean);
     const failedNicknameChanges = nicknameChanges.filter(Boolean);
 
     const logMessage = playersWithRoles
@@ -70,16 +70,17 @@ export default {
       })
       .join('\n');
 
-    await channelLog(interaction, logMessage);
-
     const messageToAuthor = new EmbedBuilder()
       .setTitle(t('commands.shuffle.author.title'))
       .setColor(0x2ecc71) // #2ECC71
       .setDescription(logMessage);
 
-    await interaction.user.send({
-      embeds: [messageToAuthor]
-    });
+    await Promise.all([
+      channelLog(interaction, logMessage),
+      interaction.user.send({
+        embeds: [messageToAuthor]
+      })
+    ]);
 
     const replyMessage =
       t('commands.shuffle.result.description') +
