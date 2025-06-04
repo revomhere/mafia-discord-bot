@@ -6,37 +6,40 @@ import { t } from '@/i18n';
 
 // returns user if failed to send DM
 export const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUser) => {
-  try {
-    const embed = new EmbedBuilder()
-      .setTitle(
-        t('commands.start.dm.title', {
-          emoji: roleEmojis[user.role],
-          role: roleNames[user.role]
-        })
-      )
-      .setDescription(roleDescriptions[user.role])
-      .setColor(roleColors[user.role])
-      .setFooter({
-        text: t('commands.start.dm.footer', {
-          time: new Date().toLocaleTimeString('uk-UA', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          }),
-          user: interaction.user.username
-        })
-      });
+  const embed = new EmbedBuilder()
+    .setTitle(
+      t('commands.start.dm.title', {
+        emoji: roleEmojis[user.role],
+        role: roleNames[user.role]
+      })
+    )
+    .setDescription(roleDescriptions[user.role])
+    .setColor(roleColors[user.role])
+    .setFooter({
+      text: t('commands.start.dm.footer', {
+        time: new Date().toLocaleTimeString('uk-UA', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }),
+        user: interaction.user.username
+      })
+    });
 
+  try {
     await user.player.send({
       embeds: [embed]
     });
   } catch (e) {
     console.error(`Failed to send DM to ${user.player.username}: `, e);
 
-    return user.player;
+    return {
+      ...user.player,
+      embedMessage: embed
+    };
   }
 };
 

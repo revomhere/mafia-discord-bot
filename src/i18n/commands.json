@@ -14,7 +14,8 @@
       },
       "dm": {
         "title": "{{emoji}} Твоя роль у грі: {{role}}",
-        "footer": "Гра розпочата о {{time}} користувачем {{user}}. Удачі!"
+        "footer": "Гра розпочата о {{time}} користувачем {{user}}. Удачі!",
+        "got-role": "Отримав роль"
       },
       "author": {
         "title": "Ведучий: Ролі гравців в Мафію"
@@ -42,7 +43,8 @@
       },
       "dm": {
         "title": "{{emoji}} Your role in the game: {{role}}",
-        "footer": "Game started at {{time}} by user {{user}}. Good luck!"
+        "footer": "Game started at {{time}} by user {{user}}. Good luck!",
+        "got-role": "Got Role"
       },
       "author": {
         "title": "Host: Player Roles in Mafia"
