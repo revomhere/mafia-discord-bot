@@ -3,14 +3,12 @@ import i18next from 'i18next';
 import errors from './errors.json';
 import general from './general.json';
 import commands from './commands.json';
-import extensions from './extensions.json';
 
 const messages = {
   en: {
     translation: {
       errors: { ...errors.en },
       commands: { ...commands.en },
-      extensions: { ...extensions.en },
       general: { ...general.en }
     }
   },
@@ -18,7 +16,6 @@ const messages = {
     translation: {
       errors: { ...errors.uk },
       commands: { ...commands.uk },
-      extensions: { ...extensions.uk },
       general: { ...general.uk }
     }
   }
