@@ -1,21 +1,21 @@
 import {
-  handleError,
+  generatePrivateLogMessage,
+  generatePublicLogMessage,
   getMafiaRolesArray,
-  channelLog,
-  dmRole,
   changeNickname,
   handleDmError,
-  generatePrivateLogMessage,
-  generatePublicLogMessage
+  handleError,
+  channelLog,
+  dmRole
 } from '@/helpers';
 import {
-  SlashCommandBuilder,
   ChatInputCommandInteraction,
-  ChannelType,
+  SlashCommandBuilder,
   ActionRowBuilder,
   ButtonBuilder,
-  ButtonStyle,
   ComponentType,
+  ChannelType,
+  ButtonStyle,
   User
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
@@ -37,7 +37,9 @@ export default {
     if (!channel || channel.type !== ChannelType.GuildVoice)
       return handleError(interaction, t('errors.no-channel-or-not-voice'));
 
-    const allUsers = channel.members.map(m => m.user).filter(user => !(user.id === interaction.user.id || user.bot));
+    const allUsers = channel.members
+      .map(m => m.user)
+      .filter(user => !(user.id === interaction.user.id || user.bot));
     if (!allUsers.length) return handleError(interaction, t('errors.cant-get-users'));
 
     await startExclusionFlow(interaction, allUsers);
@@ -139,11 +141,16 @@ async function startExclusionFlow(interaction: ChatInputCommandInteraction, allU
   });
 }
 
-async function runShuffleLogic(interaction: ChatInputCommandInteraction, allUsers: User[], excludedUserIds: string[]) {
+async function runShuffleLogic(
+  interaction: ChatInputCommandInteraction,
+  allUsers: User[],
+  excludedUserIds: string[]
+) {
   const players = allUsers.filter(user => !excludedUserIds.includes(user.id));
 
   if (!players.length) return handleError(interaction, t('errors.no-players'));
-  if (players.length < minPlayers) return handleError(interaction, t('errors.not-enough-players', { min: minPlayers }));
+  if (players.length < minPlayers)
+    return handleError(interaction, t('errors.not-enough-players', { min: minPlayers }));
 
   const roles = getMafiaRolesArray(players.length);
 
@@ -157,7 +164,8 @@ async function runShuffleLogic(interaction: ChatInputCommandInteraction, allUser
   const failedDms = dms.filter(user => user !== undefined);
   const failedNicknameChanges = nicknameChanges.filter(user => user !== undefined);
 
-  const { message: logMessage, embed: messageToAuthor } = generatePrivateLogMessage(playersWithRoles);
+  const { message: logMessage, embed: messageToAuthor } =
+    generatePrivateLogMessage(playersWithRoles);
 
   await Promise.all([
     handleDmError(interaction, failedDms),
