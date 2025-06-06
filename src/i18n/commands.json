@@ -28,7 +28,8 @@
         "failed-dm": "❗ Не вдалося надіслати особисті повідомлення гравцю {{user}}. Створено особистий канал, в якому він може побачити свою роль.",
         "failed-nickname": "❗ Не вдалося змінити ім'я користувача гравця {{user}} на {{nickname}}. Змініть роль вручну."
       }
-    }
+    },
+    "get-roles": {}
   },
   "en": {
     "start": {
@@ -59,6 +60,7 @@
         "failed-dm": "❗ Failed to send direct message to player {{user}}. Assign their role manually.",
         "failed-nickname": "❗ Failed to change username of player {{user}} to {{nickname}}. Change their role manually."
       }
-    }
+    },
+    "get-roles": {}
   }
 }
