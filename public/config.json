@@ -1,5 +1,4 @@
 {
-  "start": {
-    "minPlayers": 4
-  }
+  "minPlayers": 4,
+  "maxPlayers": 20
 }

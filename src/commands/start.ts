@@ -22,7 +22,7 @@ import { shuffle } from 'lodash-es';
 import config from '@/config';
 import { t } from '@/i18n';
 
-const { minPlayers } = config.start;
+const { minPlayers, maxPlayers } = config;
 
 export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
@@ -74,7 +74,9 @@ async function startExclusionFlow(interaction: ChatInputCommandInteraction, allU
       .setCustomId('start_game')
       .setLabel(t('commands.start.choose.start-btn'))
       .setStyle(ButtonStyle.Success)
-      .setDisabled(allUsers.length - excluded.size < minPlayers);
+      .setDisabled(
+        allUsers.length - excluded.size < minPlayers || allUsers.length - excluded.size > maxPlayers
+      );
 
     rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(cancelButton, startButton));
 
@@ -108,6 +110,13 @@ async function startExclusionFlow(interaction: ChatInputCommandInteraction, allU
       if (playersCount < minPlayers) {
         return i.reply({
           content: t('errors.not-enough-players', { min: minPlayers }),
+          ephemeral: true
+        });
+      }
+
+      if (playersCount > maxPlayers) {
+        return i.reply({
+          content: t('errors.too-many-players', { max: maxPlayers }),
           ephemeral: true
         });
       }
@@ -151,6 +160,9 @@ async function runShuffleLogic(
   if (!players.length) return handleError(interaction, t('errors.no-players'));
   if (players.length < minPlayers)
     return handleError(interaction, t('errors.not-enough-players', { min: minPlayers }));
+
+  if (players.length > maxPlayers)
+    return handleError(interaction, t('errors.too-many-players', { max: maxPlayers }));
 
   const roles = getMafiaRolesArray(players.length);
 

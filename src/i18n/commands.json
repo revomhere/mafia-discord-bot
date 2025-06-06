@@ -29,7 +29,14 @@
         "failed-nickname": "❗ Не вдалося змінити ім'я користувача гравця {{user}} на {{nickname}}. Змініть роль вручну."
       }
     },
-    "get-roles": {}
+    "get-roles": {
+      "description": "Дізнатись ролі для гри. Напр., {{command}} 5 — ролі для 5 гравців.",
+      "players-description": "Кількість гравців, від {{min}} до {{max}}.",
+      "response": {
+        "title": "Ролі для {{players}} гравців",
+        "description": "Ось ролі для гри в Мафію:\n{{roles}}"
+      }
+    }
   },
   "en": {
     "start": {
@@ -61,6 +68,13 @@
         "failed-nickname": "❗ Failed to change username of player {{user}} to {{nickname}}. Change their role manually."
       }
     },
-    "get-roles": {}
+    "get-roles": {
+      "description": "Get roles for the game. E.g., {{command}} 5 — roles for 5 players.",
+      "players-description": "Number of players, from {{min}} to {{max}}.",
+      "response": {
+        "title": "Roles for {{players}} players",
+        "description": "Here are the roles for playing Mafia:\n{{roles}}"
+      }
+    }
   }
 }

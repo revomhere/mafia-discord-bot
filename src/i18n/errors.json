@@ -5,7 +5,8 @@
     "no-channel-or-not-voice": "Канал для перемішування гравців не знайдено або він не є голосовим каналом.",
     "cant-get-users": "Не вдалося отримати користувачів з каналу.",
     "no-players": "Не знайдено гравців.",
-    "not-enough-players": "Для початку гри потрібно мінімум {{min}} гравців."
+    "not-enough-players": "Для початку гри потрібно мінімум {{min}} гравців.",
+    "too-many-players": "Забагато гравців. Максимум {{max}} гравців."
   },
   "en": {
     "default": "❌ Error",
@@ -13,6 +14,7 @@
     "no-channel-or-not-voice": "The channel for shuffling players was not found or it is not a voice channel.",
     "cant-get-users": "Could not retrieve users from the channel.",
     "no-players": "No players found.",
-    "not-enough-players": "At least {{min}} players are required to start the game."
+    "not-enough-players": "At least {{min}} players are required to start the game.",
+    "too-many-players": "Too many players. Maximum is {{max}} players."
   }
 }
