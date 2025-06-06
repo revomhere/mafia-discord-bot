@@ -43,10 +43,19 @@ client.on(Events.InteractionCreate, interaction => {
     command.execute(interaction);
   } catch (error) {
     console.error(`Error executing command ${interaction.commandName}:`, error);
-    interaction.reply({
-      content: 'There was an error while executing this command!',
-      ephemeral: true
+
+    if (!interaction.replied && !interaction.deferred) {
+      interaction.reply({
+        content: 'There was an error while executing this command!',
+        ephemeral: true
+      });
+    }
+
+    interaction.editReply({
+      content: 'An error occurred while executing the command. Please try again later.'
     });
+
+    return;
   }
 });
 
