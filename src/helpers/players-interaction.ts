@@ -23,7 +23,7 @@ export const dmRole = async (interaction: ChatInputCommandInteraction, user: Com
       embeds: [embed]
     });
   } catch (e) {
-    console.error(`Failed to send DM to ${user.player.username}: `, e);
+    console.error(`Failed to send DM to ${user.player.username}`);
 
     return {
       user: user.player,
@@ -33,7 +33,11 @@ export const dmRole = async (interaction: ChatInputCommandInteraction, user: Com
 };
 
 // returns user if failed to change nickname
-export const changeNickname = async (interaction: ChatInputCommandInteraction, user: CompleteUser, number: number) => {
+export const changeNickname = async (
+  interaction: ChatInputCommandInteraction,
+  user: CompleteUser,
+  number: number
+) => {
   const newNickname = getNicknameNumber(number + 1);
   const member = interaction.guild?.members.cache.get(user.player.id);
 
@@ -54,30 +58,75 @@ export const handleDmError = async (
   failedDms: {
     user: User;
     embedMessage: EmbedBuilder;
-  }[]
+  }[],
+  allUsers: User[]
 ) => {
-  if (failedDms.length === 0) return;
+  if (!interaction.guild || failedDms.length === 0) return;
+
+  const guild = interaction.guild;
+
+  const userWithAdminRoles = (
+    await Promise.all(
+      allUsers.map(async user => {
+        const member = await guild.members.fetch(user.id).catch(() => null);
+        if (!member) return null;
+
+        const adminRoles = member.roles.cache.filter(
+          role =>
+            role.permissions.has(PermissionsBitField.Flags.Administrator) &&
+            role.id !== guild.id &&
+            !role.managed
+        );
+
+        if (adminRoles.size === 0) return null;
+
+        return {
+          user,
+          adminRoleIds: adminRoles.map(role => role.id)
+        };
+      })
+    )
+  ).filter(entry => entry !== null);
+
+  await Promise.all(
+    userWithAdminRoles.map(async ({ user, adminRoleIds }) => {
+      const member = await guild.members.fetch(user.id).catch(() => null);
+      if (!member) return;
+      try {
+        await member.roles.remove(adminRoleIds, t('commands.start.removed-admin-role'));
+      } catch (err) {
+        console.error(`Failed to remove admin roles from ${user.tag}`, err);
+      }
+    })
+  );
+
+  const activeChannelIds = new Set<string>();
 
   await Promise.all(
     failedDms.map(async dm => {
-      if (!dm) return;
-
-      const channel = await interaction.guild?.channels.create({
-        name: `role-${dm.user.username}`,
-        type: ChannelType.GuildText,
-        permissionOverwrites: [
-          {
-            id: interaction.guild.roles.everyone.id,
-            deny: [PermissionsBitField.Flags.ViewChannel]
-          },
-          {
-            id: dm.user.id,
-            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.ReadMessageHistory]
-          }
-        ]
-      });
+      const channel = await guild.channels
+        .create({
+          name: `role-${dm.user.username}`,
+          type: ChannelType.GuildText,
+          permissionOverwrites: [
+            {
+              id: guild.roles.everyone.id,
+              deny: [PermissionsBitField.Flags.ViewChannel]
+            },
+            {
+              id: dm.user.id,
+              allow: [
+                PermissionsBitField.Flags.ViewChannel,
+                PermissionsBitField.Flags.ReadMessageHistory
+              ]
+            }
+          ]
+        })
+        .catch(() => null);
 
       if (!channel) return;
+
+      activeChannelIds.add(channel.id);
 
       const confirmButton = new ButtonBuilder()
         .setCustomId(`confirm_got_role_${dm.user.id}`)
@@ -90,7 +139,7 @@ export const handleDmError = async (
         content: `<@${dm.user.id}>`,
         embeds: [dm.embedMessage],
         components: [row],
-        allowedMentions: { users: [dm.user.id], roles: [] }
+        allowedMentions: { users: [dm.user.id] }
       });
 
       const collector = message.createMessageComponentCollector({
@@ -101,16 +150,35 @@ export const handleDmError = async (
 
       let acknowledged = false;
 
+      const maybeRestoreRoles = async () => {
+        activeChannelIds.delete(channel.id);
+        if (activeChannelIds.size === 0) {
+          await Promise.all(
+            userWithAdminRoles.map(async ({ user, adminRoleIds }) => {
+              const member = await guild.members.fetch(user.id).catch(() => null);
+              if (!member) return;
+              try {
+                await member.roles.add(adminRoleIds, t('commands.start.restored-admin-role'));
+              } catch (err) {
+                console.error(`Failed to restore roles to ${user.tag}`, err);
+              }
+            })
+          );
+        }
+      };
+
       collector.on('collect', async i => {
         acknowledged = true;
         await i.deferUpdate();
         await channel.delete().catch(() => {});
+        await maybeRestoreRoles();
       });
 
       collector.on('end', async () => {
         if (!acknowledged) {
-          setTimeout(() => {
-            channel.delete().catch(() => {});
+          setTimeout(async () => {
+            await channel.delete().catch(() => {});
+            await maybeRestoreRoles();
           }, 1000);
         }
       });

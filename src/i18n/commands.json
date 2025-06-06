@@ -3,6 +3,8 @@
     "start": {
       "description": "Перемішує гравців в Мафію.",
       "change-nickname": "Зміна імені користувача для гри в Мафію.",
+      "removed-admin-role": "Тимчасове видалення ролі адміністратора (не підглядай за ролями інших гравців! 🙈)",
+      "restored-admin-role": "Роль адміністратора відновлена. Гравці вже побачили свої ролі.",
       "choose": {
         "description": "Спочатку всі гравці в грі. Натискайте кнопки, щоб виключити/повернути гравця. Коли готові — натисніть \"{{button}}\"",
         "start-btn": "Почати гру",
@@ -32,6 +34,8 @@
     "start": {
       "description": "Shuffles players in Mafia. Use command parameters to exclude players from shuffling.",
       "change-nickname": "Change username for playing Mafia.",
+      "removed-admin-role": "Temporary removal of admin role (don't peek at other players' roles! 🙈)",
+      "restored-admin-role": "Admin role restored. Players have already seen their roles.",
       "choose": {
         "description": "All players are in the game. Click buttons to exclude/return a player. When ready, click \"{{button}}\"",
         "start-btn": "Start Game",

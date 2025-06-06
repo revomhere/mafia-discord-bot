@@ -168,7 +168,7 @@ async function runShuffleLogic(
     generatePrivateLogMessage(playersWithRoles);
 
   await Promise.all([
-    handleDmError(interaction, failedDms),
+    handleDmError(interaction, failedDms, allUsers),
     channelLog(interaction, logMessage),
     interaction.user.send({
       embeds: [messageToAuthor]
