@@ -1,6 +1,8 @@
 import jsonConfig from '@/../public/config.json';
 
 const config = {
+  nodeEnv: process.env.NODE_ENV || 'development',
+
   appId: process.env.APP_ID || '',
   privateToken: process.env.PRIVATE_TOKEN || '',
   publicKey: process.env.PUBLIC_KEY || '',
