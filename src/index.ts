@@ -41,6 +41,11 @@ client.on(Events.InteractionCreate, interaction => {
 
   try {
     command.execute(interaction);
+    console.log(
+      `${new Date()}: User ${interaction.user.username} (${interaction.user.id}) executed ${
+        interaction.commandName
+      } command`
+    );
   } catch (error) {
     console.error(`Error executing command ${interaction.commandName}:`, error);
 
