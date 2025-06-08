@@ -16,7 +16,8 @@ import {
   ComponentType,
   ChannelType,
   ButtonStyle,
-  User
+  User,
+  GuildMember
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
@@ -30,12 +31,16 @@ export default {
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
-    if (!interaction.memberPermissions?.has('Administrator'))
-      return handleError(interaction, t('errors.no-admin-role'));
+    if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
 
-    const channel = interaction.guild?.channels.cache.get(config.channelId);
+    const member = interaction.member as GuildMember;
+    const channel = member?.voice?.channel;
+
     if (!channel || channel.type !== ChannelType.GuildVoice)
       return handleError(interaction, t('errors.no-channel-or-not-voice'));
+
+    if (!interaction.memberPermissions?.has('Administrator') && channel?.id === config.channelId)
+      return handleError(interaction, t('errors.no-admin-role'));
 
     const allUsers = channel.members
       .map(m => m.user)
