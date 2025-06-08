@@ -18,10 +18,12 @@
       "title": "🎭 Правила Мафії — Офіс Нотевського",
       "roles": {
         "title": "🎲 Ролі",
-        "mafia": "{{emoji}} Мафія — жестами вночі домовляється, кого вбити.",
-        "commissar": "{{emoji}} Комісар — перевіряє 1 гравця за ніч (не вбиває). Дізнається чи гравець є Мафією або Доном.",
-        "doctor": "{{emoji}} Лікар — лікує 1 гравця за ніч, 2 рази підряд того самого — заборонено.",
-        "civilians": "{{emoji}} Мирні жителі — шукають мафію через обговорення."
+        "mafia": "{{emoji}} **Мафія** — жестами вночі домовляється, кого вбити.",
+        "don": "{{emoji}} **Дон** — лідер мафії, також перевіряє гравців на роль Комісара.",
+        "commissar": "{{emoji}} **Комісар** — перевіряє 1 гравця за ніч (не вбиває). Дізнається, чи гравець є Мафією.",
+        "doctor": "{{emoji}} **Лікар** — лікує 1 гравця за ніч, але не більше 1 раза за гру.",
+        "citizen": "{{emoji}} **Мирні жителі** — шукають мафію через обговорення.",
+        "maniac": "{{emoji}} **Маніяк** — грає сам за себе, щоночі може вбити одного гравця."
       },
       "cameras": {
         "title": "📹 Камери",
@@ -29,15 +31,29 @@
       },
       "zero_round": {
         "title": "🕊 Нульове коло",
-        "rules": ["Знайомство, без голосування.", "Після нього мафія вночі вбиває одну людину."]
+        "rules": [
+          "Знайомство, без голосування.",
+          "Після нього мафія вночі вбиває одну людину.",
+          "🛡 Гравець, якого першим вбили в попередній грі, має імунітет — його не можна вбивати першим у цій грі."
+        ]
       },
       "game_flow": {
         "title": "🔄 Хід гри",
-        "night": ["Мафія", "Комісар", "Лікар"],
         "day": [
           "Перший гравець зобов'язаний висунути когось на голосування.",
-          "Той, хто набирає найбільше голосів будеш повішеним.",
-          "Вибулий має 30 сек. на фінальну промову (лише вдень)."
+          "Інші гравці можуть підтримати або висунути інших.",
+          "Перед голосувавнням кожен висунутий має право на 30-секунду виправдальну промову",
+          "Голосування проводиться між усіма висунутими.",
+          "Той, хто набирає найбільше голосів, буде повішеним.",
+          "Вибулий має 30 сек. на фінальну промову (лише вдень).",
+          "Гравці не можуть говорити під час голосування, окрім ведучого."
+        ],
+        "night": [
+          "Прокидається мафія і жестами обирає жертву.",
+          "Дон перевіряє одного гравця на роль Комісара.",
+          "Комісар перевіряє одного гравця на наявність серед мафії (Дон вважається мафією).",
+          "Лікар обирає одного гравця для лікування (не можна лікувати одного й того ж гравця двічі підряд).",
+          "Маніяк обирає одного гравця, якого вбиває."
         ]
       }
     }
@@ -61,32 +77,45 @@
       "title": "🎭 Mafia Rules — Notevskyi Office",
       "roles": {
         "title": "🎲 Roles",
-        "mafia": "{{emoji}} Mafia — silently agrees using gestures at night on who to eliminate.",
-        "commissar": "{{emoji}} Commissar — checks 1 player per night (does not kill). Learns whether the player is Mafia or Don.",
-        "doctor": "{{emoji}} Doctor — heals 1 player per night; healing the same player two nights in a row is not allowed.",
-        "civilians": "{{emoji}} Civilians — try to find mafia through discussion."
+        "mafia": "{{emoji}} **Mafia** — communicates at night using gestures to agree on a target to kill.",
+        "don": "{{emoji}} **Don** — the Mafia leader, also checks players for the role of Commissar.",
+        "commissar": "{{emoji}} **Commissar** — checks 1 player per night (doesn't kill). Learns if the player is Mafia.",
+        "doctor": "{{emoji}} **Doctor** — heals 1 player per night, but no more than once per game.",
+        "citizen": "{{emoji}} **Civilians** — search for the Mafia through discussion.",
+        "maniac": "{{emoji}} **Maniac** — plays solo and can kill one player each night."
       },
       "cameras": {
         "title": "📹 Cameras",
         "rules": [
-          "All players must keep their cameras on during the game.",
-          "Eliminated players must turn off their camera."
+          "All players must have their cameras turned on.",
+          "Eliminated players must turn their cameras off."
         ]
       },
       "zero_round": {
         "title": "🕊 Zero Round",
         "rules": [
-          "Introductory round, no voting.",
-          "After it ends, mafia kills one player during the first night."
+          "Introductions only, no voting.",
+          "After this, the Mafia kills one person during the night.",
+          "🛡 The player who was killed first in the previous game has immunity — they cannot be killed first this game."
         ]
       },
       "game_flow": {
         "title": "🔄 Game Flow",
-        "night": ["Mafia", "Commissar", "Doctor"],
         "day": [
           "The first player must nominate someone for voting.",
-          "The player with the most votes is eliminated.",
-          "Eliminated player has 30 seconds for a final speech (day only)."
+          "Other players may support or nominate additional candidates.",
+          "Each nominated player gets a 30-second defense speech before voting.",
+          "Voting is conducted among all nominated players.",
+          "The player with the most votes will be hanged.",
+          "The eliminated player gets a 30-second final speech (daytime only).",
+          "Players may not speak during voting, except the host."
+        ],
+        "night": [
+          "The Mafia wakes up and silently chooses a victim.",
+          "The Don checks one player to identify the Commissar.",
+          "The Commissar checks one player to see if they are part of the Mafia (Don counts as Mafia).",
+          "The Doctor selects one player to heal (cannot heal the same player two nights in a row).",
+          "The Maniac selects one player to kill."
         ]
       }
     }
