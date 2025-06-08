@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "remove-commands": "cross-env NODE_ENV=production vite-node src/scripts/remove-commands.ts",
-    "deploy-commands": "vite-node src/scripts/deploy-commands.ts",
+    "deploy-commands": "npm run remove-commands && vite-node src/scripts/deploy-commands.ts",
     "start-bot": "vite-node src/index.ts",
     "start": "cross-env NODE_ENV=production npm run deploy-commands && npm run start-bot",
     "deploy-dev": "vite-node src/scripts/deploy-commands.ts && vite-node src/index.ts",

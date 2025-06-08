@@ -10,8 +10,6 @@ const { appId, guildId, nodeEnv } = config;
 const rest = new REST({ version: '10' }).setToken(process.env.PRIVATE_TOKEN || '');
 const commands = await getCommands('@/commands');
 
-await rest.put(Routes.applicationCommands(appId), { body: [] });
-
 if (nodeEnv === 'development') {
   await rest.put(Routes.applicationGuildCommands(appId, guildId), {
     body: commands.map(command => command.data.toJSON())
