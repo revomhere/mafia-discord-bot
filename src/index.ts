@@ -1,6 +1,6 @@
 import '@/setup';
 
-import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, Events, GatewayIntentBits, MessageFlags } from 'discord.js';
 import { getCommands } from '@/helpers';
 import { Command } from '@/types';
 import config from '@/config';
@@ -52,7 +52,7 @@ client.on(Events.InteractionCreate, interaction => {
     if (!interaction.replied && !interaction.deferred) {
       interaction.reply({
         content: 'There was an error while executing this command!',
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
       });
     }
 

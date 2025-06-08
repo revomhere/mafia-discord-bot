@@ -17,7 +17,8 @@ import {
   ChannelType,
   ButtonStyle,
   User,
-  GuildMember
+  GuildMember,
+  MessageFlags
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
@@ -115,14 +116,14 @@ async function startExclusionFlow(interaction: ChatInputCommandInteraction, allU
       if (playersCount < minPlayers) {
         return i.reply({
           content: t('errors.not-enough-players', { min: minPlayers }),
-          ephemeral: true
+          flags: MessageFlags.Ephemeral
         });
       }
 
       if (playersCount > maxPlayers) {
         return i.reply({
           content: t('errors.too-many-players', { max: maxPlayers }),
-          ephemeral: true
+          flags: MessageFlags.Ephemeral
         });
       }
 

@@ -1,5 +1,10 @@
 import { MafiaRole, roleNames, roleEmojis } from '@/enums';
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import {
+  ChatInputCommandInteraction,
+  EmbedBuilder,
+  MessageFlags,
+  SlashCommandBuilder
+} from 'discord.js';
 import { getMafiaRolesArray } from '@/helpers';
 import { t } from '@/i18n';
 import config from '@/config';
@@ -69,7 +74,7 @@ export default {
 
     return interaction.reply({
       embeds: [response],
-      ephemeral: true
+      flags: MessageFlags.Ephemeral
     });
   }
 };
