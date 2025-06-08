@@ -16,10 +16,12 @@ if (nodeEnv === 'development') {
   await rest.put(Routes.applicationGuildCommands(appId, guildId), {
     body: commands.map(command => command.data.toJSON())
   });
+
+  console.log(`Successfully registered ${commands.length} application commands in ${guildId}`);
 } else {
   await rest.put(Routes.applicationCommands(appId), {
     body: commands.map(command => command.data.toJSON())
   });
-}
 
-console.log(`Successfully registered ${commands.length} application commands globally`);
+  console.log(`Successfully registered ${commands.length} application commands globally`);
+}

@@ -36,6 +36,9 @@
         "title": "Ролі для {{players}} гравців",
         "description": "Ось ролі для гри в Мафію:\n{{roles}}"
       }
+    },
+    "rules": {
+      "description": "Правила гри в Мафію для Спільноти Офісу Нотевського."
     }
   },
   "en": {
@@ -75,6 +78,9 @@
         "title": "Roles for {{players}} players",
         "description": "Here are the roles for playing Mafia:\n{{roles}}"
       }
+    },
+    "rules": {
+      "description": "Rules for Mafia game for Notevsky Office Community."
     }
   }
 }

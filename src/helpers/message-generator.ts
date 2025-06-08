@@ -62,7 +62,9 @@ export const generatePublicLogMessage = (
 ) => {
   const message =
     t('commands.start.result.description') +
-    failedDms.map(user => '\n' + t('commands.start.result.failed-dm', { user: user?.user?.username })) +
+    failedDms.map(
+      user => '\n' + t('commands.start.result.failed-dm', { user: user?.user?.username })
+    ) +
     failedNicknameChanges.map(
       user =>
         '\n' +
@@ -72,7 +74,9 @@ export const generatePublicLogMessage = (
         })
     ) +
     '\n\n' +
-    playersWithRoles.map((user, idx) => `${user.player.username}: ${getNicknameNumber(idx + 1)}`).join('\n');
+    playersWithRoles
+      .map((user, idx) => `${user.player.username}: ${getNicknameNumber(idx + 1)}`)
+      .join('\n');
 
   const embed = new EmbedBuilder()
     .setTitle(t('commands.start.result.title'))

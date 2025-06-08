@@ -1,11 +1,10 @@
 import jsonConfig from '@/../public/config.json';
 
 const config = {
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv: process.env.NODE_ENV || 'production',
 
   appId: process.env.APP_ID || '',
   privateToken: process.env.PRIVATE_TOKEN || '',
-  publicKey: process.env.PUBLIC_KEY || '',
 
   guildId: process.env.GUILD_ID || '',
   channelId: process.env.CHANNEL_ID || '',

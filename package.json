@@ -9,7 +9,7 @@
     "start-bot": "vite-node src/index.ts",
     "start": "npm run deploy-commands && npm run start-bot",
     "deploy-dev": "vite-node src/scripts/deploy-commands.ts && vite-node src/index.ts",
-    "dev": "dotenv -e .env.dev -- npm run deploy-dev"
+    "dev": "dotenv -e .env.dev -- cross-env NODE_ENV=development npm run deploy-dev"
   },
   "keywords": [],
   "author": "revom",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.15.29",
+    "cross-env": "^7.0.3",
     "dotenv-cli": "^8.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",

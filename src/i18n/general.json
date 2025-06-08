@@ -13,6 +13,33 @@
       "doctor-description": "Ти — **Лікар**. Вночі ти можеш врятувати одного гравця від вбивства мафіозі. Обирай, кого захищати, враховуючи підозри і ризики. Твої рішення можуть змінити хід гри, зберігаючи життя важливих для мирної команди гравців.",
       "maniac": "Маніяк",
       "maniac-description": "Ти — **Маніяк**. Твоя ціль — вбити всіх інших гравців, незалежно від їх ролей. Ти дієш самостійно і не маєш союзників. Обережно балансуй між нападом і приховуванням, щоб залишитись останнім живим та виграти гру."
+    },
+    "mafia_rules": {
+      "title": "🎭 Правила Мафії — Офіс Нотевського",
+      "roles": {
+        "title": "🎲 Ролі",
+        "mafia": "{{emoji}} Мафія — жестами вночі домовляється, кого вбити.",
+        "commissar": "{{emoji}} Комісар — перевіряє 1 гравця за ніч (не вбиває). Дізнається чи гравець є Мафією або Доном.",
+        "doctor": "{{emoji}} Лікар — лікує 1 гравця за ніч, 2 рази підряд того самого — заборонено.",
+        "civilians": "{{emoji}} Мирні жителі — шукають мафію через обговорення."
+      },
+      "cameras": {
+        "title": "📹 Камери",
+        "rules": ["Всі гравці мають бути з увімкненими камерами.", "Вибув — вимикаєш камеру."]
+      },
+      "zero_round": {
+        "title": "🕊 Нульове коло",
+        "rules": ["Знайомство, без голосування.", "Після нього мафія вночі вбиває одну людину."]
+      },
+      "game_flow": {
+        "title": "🔄 Хід гри",
+        "night": ["Мафія", "Комісар", "Лікар"],
+        "day": [
+          "Перший гравець зобов'язаний висунути когось на голосування.",
+          "Той, хто набирає найбільше голосів будеш повішеним.",
+          "Вибулий має 30 сек. на фінальну промову (лише вдень)."
+        ]
+      }
     }
   },
   "en": {
@@ -29,6 +56,39 @@
       "doctor-description": "You are the **Doctor**. Each night, you have the ability to save one player from being killed by the mafia. Choose wisely whom to protect, considering suspicions and threats. Your decisions can change the course of the game by preserving key citizens.",
       "maniac": "Maniac",
       "maniac-description": "You are the **Maniac**. Your goal is to kill all other players, regardless of their roles. You work alone with no allies. Balance your attacks and concealment carefully to be the last player alive and claim victory."
+    },
+    "mafia_rules": {
+      "title": "🎭 Mafia Rules — Notevskyi Office",
+      "roles": {
+        "title": "🎲 Roles",
+        "mafia": "{{emoji}} Mafia — silently agrees using gestures at night on who to eliminate.",
+        "commissar": "{{emoji}} Commissar — checks 1 player per night (does not kill). Learns whether the player is Mafia or Don.",
+        "doctor": "{{emoji}} Doctor — heals 1 player per night; healing the same player two nights in a row is not allowed.",
+        "civilians": "{{emoji}} Civilians — try to find mafia through discussion."
+      },
+      "cameras": {
+        "title": "📹 Cameras",
+        "rules": [
+          "All players must keep their cameras on during the game.",
+          "Eliminated players must turn off their camera."
+        ]
+      },
+      "zero_round": {
+        "title": "🕊 Zero Round",
+        "rules": [
+          "Introductory round, no voting.",
+          "After it ends, mafia kills one player during the first night."
+        ]
+      },
+      "game_flow": {
+        "title": "🔄 Game Flow",
+        "night": ["Mafia", "Commissar", "Doctor"],
+        "day": [
+          "The first player must nominate someone for voting.",
+          "The player with the most votes is eliminated.",
+          "Eliminated player has 30 seconds for a final speech (day only)."
+        ]
+      }
     }
   }
 }
