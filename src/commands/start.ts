@@ -30,7 +30,6 @@ import config from '@/config';
 import { t } from '@/i18n';
 
 const { minPlayers, maxPlayers } = config;
-const isMocked = process.env.NODE_ENV === 'development';
 
 export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
@@ -39,36 +38,6 @@ export default {
     await interaction.deferReply({ ephemeral: true });
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
-
-    if (isMocked) {
-      const guild = interaction.guild;
-      if (!guild) return;
-
-      const mockedUserIds = [
-        '664895051423285279',
-        '372383774937186315',
-        '573808316682076170',
-        '519070576330014720',
-        // '378499998267998213',
-        // '402466367321800704',
-        // '380728593485135874',
-        // '400612111161753601',
-        '573809642203774976'
-        // '437152386755198977',
-        // '1376169425782182021',
-      ];
-
-      const users = await Promise.all(
-        mockedUserIds.map(async id => {
-          const member = await guild.members.fetch(id);
-          return member?.user;
-        })
-      );
-
-      await startPreparingFlow(interaction, users);
-
-      return;
-    }
 
     const member = interaction.member as GuildMember;
     const channel = member?.voice?.channel;
@@ -249,25 +218,21 @@ async function runShuffleLogic(
   const { message: logMessage, embed: messageToAuthor } =
     generatePrivateLogMessage(playersWithRoles);
 
-  if (!isMocked) {
-    await Promise.all([
-      handleDmError(interaction, failedDms, allUsers),
-      channelLog(interaction, logMessage),
-      interaction.user.send({
-        embeds: [messageToAuthor]
-      })
-    ]);
-  }
+  await Promise.all([
+    handleDmError(interaction, failedDms, allUsers),
+    channelLog(interaction, logMessage),
+    interaction.user.send({
+      embeds: [messageToAuthor]
+    })
+  ]);
 
   const response = generatePublicLogMessage(playersWithRoles, failedDms, failedNicknameChanges);
 
   if (interaction.channel && 'send' in interaction.channel) {
     try {
-      if (!isMocked) {
-        await interaction.channel.send({
-          embeds: [response]
-        });
-      }
+      await interaction.channel.send({
+        embeds: [response]
+      });
 
       await interaction.deleteReply();
 
