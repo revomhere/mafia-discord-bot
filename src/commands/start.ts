@@ -1,10 +1,9 @@
 import {
   generatePrivateLogMessage,
-  createHostAssistantReply,
   generatePublicLogMessage,
   getMafiaRolesArray,
-  addHostController,
   changeNickname,
+  startAssistant,
   handleDmError,
   handleError,
   channelLog,
@@ -23,7 +22,8 @@ import {
   MessageFlags,
   ButtonInteraction,
   InteractionCollector,
-  Collection
+  Collection,
+  TextBasedChannel
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
@@ -182,12 +182,6 @@ async function handlePreparingInteraction(
 
     await runShuffleLogic(interaction, allUsers, Array.from(excluded));
 
-    const hostMessage = await i.followUp({
-      ...createHostAssistantReply(),
-      flags: MessageFlags.Ephemeral
-    });
-
-    addHostController(hostMessage, interaction.user.id);
     return;
   }
 
@@ -273,12 +267,18 @@ async function runShuffleLogic(
         embeds: [response]
       });
       await interaction.deleteReply();
-    } catch (e) {}
+
+      await startAssistant(playersWithRoles, interaction, interaction.user.id);
+    } catch (e) {
+      console.error('Error sending game start message:', e);
+    }
 
     return;
   }
 
-  return await interaction.editReply({
+  await interaction.editReply({
     embeds: [response]
   });
+
+  await startAssistant(playersWithRoles, interaction, interaction.user.id);
 }

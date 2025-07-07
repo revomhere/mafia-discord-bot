@@ -1,65 +1,75 @@
-import { ButtonBuilder, ButtonStyle, ActionRowBuilder, Message, ComponentType } from 'discord.js';
+import {
+  ActionRowBuilder,
+  TextBasedChannel,
+  ComponentType,
+  ButtonBuilder,
+  ButtonStyle,
+  ChatInputCommandInteraction,
+  MessageFlags
+} from 'discord.js';
 import { t } from '@/i18n';
+import { CompleteUser } from '@/types';
 
-export const createHostAssistantReply = () => {
-  return {
+export const askToStartAssistant = async (
+  interaction: ChatInputCommandInteraction,
+  hostId: string
+): Promise<boolean> => {
+  const message = await interaction.followUp({
     content: t('general.host-assistant.start-question'),
+    flags: MessageFlags.Ephemeral,
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
           .setCustomId('cancel-assistant')
           .setLabel(t('general.host-assistant.cancel-btn'))
-          .setStyle(ButtonStyle.Danger)
-          .setDisabled(false),
+          .setStyle(ButtonStyle.Danger),
 
         new ButtonBuilder()
           .setCustomId('start-assistant')
           .setLabel(t('general.host-assistant.start-btn'))
           .setStyle(ButtonStyle.Success)
-          .setDisabled(false)
       )
     ]
-  };
-};
-
-export const addHostController = (message: Message<boolean>, userId: string) => {
-  const hostCollector = message.createMessageComponentCollector({
-    componentType: ComponentType.Button,
-    time: 2 * 60 * 1000 // 2 min
   });
 
-  hostCollector.on('collect', async buttonInteraction => {
-    if (buttonInteraction.user.id !== userId) {
-      return buttonInteraction.reply({
-        content: t('commands.start.choose.buttons-not-for-you'),
-        ephemeral: true
-      });
-    }
+  return new Promise(resolve => {
+    const collector = message.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      time: 2 * 60 * 1000
+    });
 
-    if (buttonInteraction.customId === 'cancel-assistant') {
-      hostCollector.stop('cancelled');
+    collector.on('collect', async i => {
+      if (i.user.id !== hostId) {
+        return i.reply({
+          content: t('commands.start.choose.buttons-not-for-you'),
+          ephemeral: true
+        });
+      }
 
-      await buttonInteraction.update({
-        content: t('general.host-assistant.cancelled'),
-        components: []
-      });
+      collector.stop(i.customId);
 
-      return;
-    }
+      await i.deleteReply().catch(() => {});
 
-    if (buttonInteraction.customId === 'start-assistant') {
-      hostCollector.stop('started');
+      resolve(i.customId === 'start-assistant');
+    });
 
-      await buttonInteraction.update({
-        content: t('general.host-assistant.starting'),
-        components: []
-      });
-
-      await startAssistant(message);
-    }
+    collector.on('end', async (_, reason) => {
+      if (reason !== 'start-assistant' && reason !== 'cancel-assistant') {
+        await message.delete().catch(() => {});
+        resolve(false);
+      }
+    });
   });
 };
 
-export const startAssistant = (_message: Message<boolean>) => {
-  console.log('Start assistant...');
+export const startAssistant = async (
+  players: CompleteUser[],
+  interaction: ChatInputCommandInteraction,
+  hostId: string
+) => {
+  const isAssistentNeeded = await askToStartAssistant(interaction, hostId);
+
+  if (!isAssistentNeeded) return;
+
+  console.log('start assistant');
 };

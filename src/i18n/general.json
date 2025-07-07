@@ -3,9 +3,7 @@
     "host-assistant": {
       "start-question": "Ви хочете запустити Помічника Ведучого?",
       "start-btn": "Так",
-      "cancel-btn": "Ні",
-      "cancelled": "Помічник Ведучого скасовано.",
-      "starting": "Помічник Ведучого запускається..."
+      "cancel-btn": "Ні"
     },
     "roles": {
       "mafia": "Мафія",
@@ -69,9 +67,7 @@
     "host-assistant": {
       "start-question": "Do you want to start Host Assistant?",
       "start-yes": "Yes",
-      "start-no": "No",
-      "cancelled": "Host Assistant is cancelled.",
-      "starting": "Host Assistant is starting..."
+      "start-no": "No"
     },
     "roles": {
       "mafia": "Mafia",
