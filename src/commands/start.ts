@@ -30,9 +30,42 @@ export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
 
   async execute(interaction: ChatInputCommandInteraction) {
+    const isMocked = process.env.NODE_ENV === 'development';
+
     await interaction.deferReply({ ephemeral: true });
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
+
+    if (isMocked) {
+      const guild = interaction.guild;
+      if (!guild) return;
+
+      const mockedUserIds = [
+        '664895051423285279',
+        '372383774937186315',
+        '573808316682076170',
+        '519070576330014720',
+        '378499998267998213',
+        '402466367321800704',
+        '380728593485135874',
+        '400612111161753601',
+        '573809642203774976',
+        '437152386755198977',
+        '1376169425782182021',
+        '310848622642069504'
+      ];
+
+      const users = await Promise.all(
+        mockedUserIds.map(async id => {
+          const member = await guild.members.fetch(id);
+          return member?.user;
+        })
+      );
+
+      await startExclusionFlow(interaction, users);
+
+      return;
+    }
 
     const member = interaction.member as GuildMember;
     const channel = member?.voice?.channel;

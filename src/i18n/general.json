@@ -21,7 +21,7 @@
         "mafia": "{{emoji}} **Мафія** — жестами вночі домовляється, кого вбити.",
         "don": "{{emoji}} **Дон** — лідер мафії, також перевіряє гравців на роль Комісара.",
         "commissar": "{{emoji}} **Комісар** — перевіряє 1 гравця за ніч (не вбиває). Дізнається, чи гравець є Мафією.",
-        "doctor": "{{emoji}} **Лікар** — лікує 1 гравця за ніч, але не більше 1 раза за гру.",
+        "doctor": "{{emoji}} **Лікар** — лікує 1 гравця за ніч, але не 2 рази підряд.",
         "citizen": "{{emoji}} **Мирні жителі** — шукають мафію через обговорення.",
         "maniac": "{{emoji}} **Маніяк** — грає сам за себе, щоночі може вбити одного гравця."
       },
@@ -80,7 +80,7 @@
         "mafia": "{{emoji}} **Mafia** — communicates at night using gestures to agree on a target to kill.",
         "don": "{{emoji}} **Don** — the Mafia leader, also checks players for the role of Commissar.",
         "commissar": "{{emoji}} **Commissar** — checks 1 player per night (doesn't kill). Learns if the player is Mafia.",
-        "doctor": "{{emoji}} **Doctor** — heals 1 player per night, but no more than once per game.",
+        "doctor": "{{emoji}} **Doctor** — heals 1 player per night, but can't heal 2 players in a row.",
         "citizen": "{{emoji}} **Civilians** — search for the Mafia through discussion.",
         "maniac": "{{emoji}} **Maniac** — plays solo and can kill one player each night."
       },

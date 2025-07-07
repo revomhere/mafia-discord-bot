@@ -95,7 +95,7 @@ export const handleDmError = async (
       try {
         await member.roles.remove(adminRoleIds, t('commands.start.removed-admin-role'));
       } catch (err) {
-        console.error(`Failed to remove admin roles from ${user.tag}`, err);
+        console.error(`Failed to remove admin roles from ${user.tag}`);
       }
     })
   );
