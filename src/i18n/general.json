@@ -1,5 +1,12 @@
 {
   "uk": {
+    "host-assistant": {
+      "start-question": "Ви хочете запустити Помічника Ведучого?",
+      "start-btn": "Так",
+      "cancel-btn": "Ні",
+      "cancelled": "Помічник Ведучого скасовано.",
+      "starting": "Помічник Ведучого запускається..."
+    },
     "roles": {
       "mafia": "Мафія",
       "mafia-description": "Ти — **Мафія**. Вночі разом із іншими мафіозі обираєш жертву для вбивства. Твоя мета — ліквідувати всіх мирних жителів і залишитись непоміченим. Працюй у тіні, щоб контролювати гру, уникай підозр і маніпулюй голосуваннями вдень.",
@@ -59,6 +66,13 @@
     }
   },
   "en": {
+    "host-assistant": {
+      "start-question": "Do you want to start Host Assistant?",
+      "start-yes": "Yes",
+      "start-no": "No",
+      "cancelled": "Host Assistant is cancelled.",
+      "starting": "Host Assistant is starting..."
+    },
     "roles": {
       "mafia": "Mafia",
       "mafia-description": "You are **Mafia**. At night, you collaborate with other mafia members to choose a target to eliminate. Your goal is to secretly remove all the citizens while avoiding suspicion. Work in the shadows, manipulate voting during the day, and keep your identity hidden to secure a win for your team.",

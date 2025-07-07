@@ -1,7 +1,9 @@
 import {
   generatePrivateLogMessage,
+  createHostAssistantReply,
   generatePublicLogMessage,
   getMafiaRolesArray,
+  addHostController,
   changeNickname,
   handleDmError,
   handleError,
@@ -18,7 +20,10 @@ import {
   ButtonStyle,
   User,
   GuildMember,
-  MessageFlags
+  MessageFlags,
+  ButtonInteraction,
+  InteractionCollector,
+  Collection
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
@@ -45,13 +50,13 @@ export default {
         '372383774937186315',
         '573808316682076170',
         '519070576330014720',
-        '378499998267998213',
-        '402466367321800704',
-        '380728593485135874',
-        '400612111161753601',
-        '573809642203774976',
-        '437152386755198977',
-        '1376169425782182021',
+        // '378499998267998213',
+        // '402466367321800704',
+        // '380728593485135874',
+        // '400612111161753601',
+        // '573809642203774976',
+        // '437152386755198977',
+        // '1376169425782182021',
         '310848622642069504'
       ];
 
@@ -62,7 +67,7 @@ export default {
         })
       );
 
-      await startExclusionFlow(interaction, users);
+      await startPreparingFlow(interaction, users);
 
       return;
     }
@@ -81,111 +86,145 @@ export default {
       .filter(user => !(user.id === interaction.user.id || user.bot));
     if (!allUsers.length) return handleError(interaction, t('errors.cant-get-users'));
 
-    await startExclusionFlow(interaction, allUsers);
+    await startPreparingFlow(interaction, allUsers);
   }
 };
 
-async function startExclusionFlow(interaction: ChatInputCommandInteraction, allUsers: User[]) {
-  const excluded = new Set<string>();
+function createPreparingButtons(allUsers: User[], excluded: Set<string>) {
+  const userButtons = allUsers.map(user => {
+    const isExcluded = excluded.has(user.id);
+    return new ButtonBuilder()
+      .setCustomId(`exclude_${user.id}`)
+      .setLabel(user.username)
+      .setStyle(isExcluded ? ButtonStyle.Danger : ButtonStyle.Secondary);
+  });
 
-  const createButtons = () => {
-    const userButtons = allUsers.map(user => {
-      const isExcluded = excluded.has(user.id);
-      return new ButtonBuilder()
-        .setCustomId(`exclude_${user.id}`)
-        .setLabel(user.username)
-        .setStyle(isExcluded ? ButtonStyle.Danger : ButtonStyle.Secondary)
-        .setDisabled(false);
-    });
+  const rows: ActionRowBuilder<ButtonBuilder>[] = [];
+  for (let i = 0; i < userButtons.length; i += 5) {
+    rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(userButtons.slice(i, i + 5)));
+  }
 
-    const rows: ActionRowBuilder<ButtonBuilder>[] = [];
-    for (let i = 0; i < userButtons.length; i += 5) {
-      rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(userButtons.slice(i, i + 5)));
-    }
+  const cancelButton = new ButtonBuilder()
+    .setCustomId('cancel_game')
+    .setLabel(t('commands.start.choose.cancel-btn'))
+    .setStyle(ButtonStyle.Danger);
 
-    const cancelButton = new ButtonBuilder()
-      .setCustomId('cancel_game')
-      .setLabel(t('commands.start.choose.cancel-btn'))
-      .setStyle(ButtonStyle.Danger)
-      .setDisabled(false);
+  const startButton = new ButtonBuilder()
+    .setCustomId('start_game')
+    .setLabel(t('commands.start.choose.start-btn'))
+    .setStyle(ButtonStyle.Success)
+    .setDisabled(
+      allUsers.length - excluded.size < minPlayers || allUsers.length - excluded.size > maxPlayers
+    );
 
-    const startButton = new ButtonBuilder()
-      .setCustomId('start_game')
-      .setLabel(t('commands.start.choose.start-btn'))
-      .setStyle(ButtonStyle.Success)
-      .setDisabled(
-        allUsers.length - excluded.size < minPlayers || allUsers.length - excluded.size > maxPlayers
-      );
+  rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(cancelButton, startButton));
+  return rows;
+}
 
-    rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(cancelButton, startButton));
-
-    return rows;
-  };
-
-  const message = await interaction.editReply({
+function showInitialPreparingUI(
+  interaction: ChatInputCommandInteraction,
+  allUsers: User[],
+  excluded: Set<string>
+) {
+  return interaction.editReply({
     content: t('commands.start.choose.description', {
       button: t('commands.start.choose.start-btn')
     }),
-    components: createButtons()
+    components: createPreparingButtons(allUsers, excluded)
   });
+}
 
-  const collector = message.createMessageComponentCollector({
+function createPreparingCollector(message: any, userId: string) {
+  return message.createMessageComponentCollector({
     componentType: ComponentType.Button,
-    time: 5 * 60 * 1000 // 5 min
+    time: 5 * 60 * 1000,
+    filter: (i: ButtonInteraction) => i.user.id === userId
   });
+}
 
-  collector.on('collect', async i => {
-    if (i.user.id !== interaction.user.id) {
-      return i.reply({ content: t('commands.start.choose.buttons-not-for-you'), ephemeral: true });
+async function handlePreparingInteraction(
+  i: any,
+  {
+    interaction,
+    allUsers,
+    excluded,
+    collector
+  }: {
+    interaction: ChatInputCommandInteraction;
+    allUsers: User[];
+    excluded: Set<string>;
+    collector: InteractionCollector<ButtonInteraction>;
+  }
+) {
+  if (i.customId === 'cancel_game') {
+    collector.stop('cancelled');
+    return i.update({ content: t('commands.start.choose.game-cancelled'), components: [] });
+  }
+
+  if (i.customId === 'start_game') {
+    const playersCount = allUsers.length - excluded.size;
+    if (playersCount < minPlayers) {
+      return i.reply({
+        content: t('errors.not-enough-players', { min: minPlayers }),
+        flags: MessageFlags.Ephemeral
+      });
     }
 
-    if (i.customId === 'cancel_game') {
-      collector.stop('cancelled');
-      return i.update({ content: t('commands.start.choose.game-cancelled'), components: [] });
+    if (playersCount > maxPlayers) {
+      return i.reply({
+        content: t('errors.too-many-players', { max: maxPlayers }),
+        flags: MessageFlags.Ephemeral
+      });
     }
 
-    if (i.customId === 'start_game') {
-      const playersCount = allUsers.length - excluded.size;
-      if (playersCount < minPlayers) {
-        return i.reply({
-          content: t('errors.not-enough-players', { min: minPlayers }),
-          flags: MessageFlags.Ephemeral
-        });
-      }
+    collector.stop('started');
+    await i.update({ content: t('commands.start.choose.game-starting'), components: [] });
 
-      if (playersCount > maxPlayers) {
-        return i.reply({
-          content: t('errors.too-many-players', { max: maxPlayers }),
-          flags: MessageFlags.Ephemeral
-        });
-      }
+    await runShuffleLogic(interaction, allUsers, Array.from(excluded));
 
-      collector.stop('started');
-      await i.update({ content: t('commands.start.choose.game-starting'), components: [] });
+    const hostMessage = await i.followUp({
+      ...createHostAssistantReply(),
+      flags: MessageFlags.Ephemeral
+    });
 
-      await runShuffleLogic(interaction, allUsers, Array.from(excluded));
-      return;
-    }
+    addHostController(hostMessage, interaction.user.id);
+    return;
+  }
 
-    const userId = i.customId.replace('exclude_', '');
-    if (excluded.has(userId)) excluded.delete(userId);
-    else excluded.add(userId);
+  const userId = i.customId.replace('exclude_', '');
+  if (excluded.has(userId)) excluded.delete(userId);
+  else excluded.add(userId);
 
-    await i.update({
-      content: t('commands.start.choose.description', {
-        button: t('commands.start.choose.start-btn')
-      }),
-      components: createButtons()
+  await i.update({
+    content: t('commands.start.choose.description', {
+      button: t('commands.start.choose.start-btn')
+    }),
+    components: createPreparingButtons(allUsers, excluded)
+  });
+}
+
+async function startPreparingFlow(interaction: ChatInputCommandInteraction, allUsers: User[]) {
+  const excluded = new Set<string>();
+
+  const message = await showInitialPreparingUI(interaction, allUsers, excluded);
+  const collector = createPreparingCollector(message, interaction.user.id);
+
+  collector.on('collect', async (i: ButtonInteraction) => {
+    await handlePreparingInteraction(i, {
+      interaction,
+      allUsers,
+      excluded,
+      collector
     });
   });
 
-  collector.on('end', (_, reason) => {
-    if (reason !== 'started' && reason !== 'cancelled') {
-      interaction.editReply({
-        content: t('commands.start.choose.time-is-gone'),
-        components: []
-      });
-    }
+  collector.on('end', async (_: Collection<string, ButtonInteraction>, reason: string) => {
+    if (reason === 'started' || reason === 'cancelled') return;
+
+    await interaction.editReply({
+      content: t('commands.start.choose.time-is-gone'),
+      components: []
+    });
   });
 }
 
