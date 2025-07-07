@@ -1,9 +1,25 @@
 {
   "uk": {
     "host-assistant": {
+      "buttons-not-for-you": "Ці кнопки не для вас.",
       "start-question": "Ви хочете запустити Помічника Ведучого?",
       "start-btn": "Так",
-      "cancel-btn": "Ні"
+      "cancel-btn": "Ні",
+      "mafia-group-title": "Мафія + Дон",
+      "mafia-group-desc": "Ведучий знайомиться із мафією",
+      "maniac-title": "Маніяк",
+      "maniac-desc": "Ведучий знайомиться з маніяком",
+      "commissar-title": "Комісар",
+      "commissar-desc": "Ведучий знайомиться з комісаром",
+      "doctor-title": "Лікар",
+      "doctor-desc": "Ведучий знайомиться з лікарем",
+      "no-roles": "Немає ролей для знайомства у цю ніч.",
+      "btn-stop": "Достроково завершити гру",
+      "btn-back": "Назад",
+      "btn-next": "Далі",
+      "game-stopped": "Гру достроково завершено.",
+      "finished": "Ведучий познайомився з усіма ролями.",
+      "timeout": "Час вийшов. Знайомство завершено примусово."
     },
     "roles": {
       "mafia": "Мафія",
@@ -65,9 +81,25 @@
   },
   "en": {
     "host-assistant": {
+      "buttons-not-for-you": "These buttons are not for you.",
       "start-question": "Do you want to start Host Assistant?",
       "start-yes": "Yes",
-      "start-no": "No"
+      "start-no": "No",
+      "mafia-group-title": "Mafia + Don",
+      "mafia-group-desc": "Host meets the mafia",
+      "maniac-title": "Maniac",
+      "maniac-desc": "Host meets the maniac",
+      "commissar-title": "Commissar",
+      "commissar-desc": "Host meets the commissar",
+      "doctor-title": "Doctor",
+      "doctor-desc": "Host meets the doctor",
+      "no-roles": "No roles to meet tonight.",
+      "btn-stop": "Stop game early",
+      "btn-back": "Back",
+      "btn-next": "Next",
+      "game-stopped": "Game stopped early.",
+      "finished": "Host has met all roles.",
+      "timeout": "Time's up. Introduction ended forcibly."
     },
     "roles": {
       "mafia": "Mafia",

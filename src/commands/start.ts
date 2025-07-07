@@ -30,13 +30,12 @@ import config from '@/config';
 import { t } from '@/i18n';
 
 const { minPlayers, maxPlayers } = config;
+const isMocked = process.env.NODE_ENV === 'development';
 
 export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
 
   async execute(interaction: ChatInputCommandInteraction) {
-    const isMocked = process.env.NODE_ENV === 'development';
-
     await interaction.deferReply({ ephemeral: true });
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
@@ -54,10 +53,9 @@ export default {
         // '402466367321800704',
         // '380728593485135874',
         // '400612111161753601',
-        // '573809642203774976',
+        '573809642203774976'
         // '437152386755198977',
         // '1376169425782182021',
-        '310848622642069504'
       ];
 
       const users = await Promise.all(
@@ -251,21 +249,26 @@ async function runShuffleLogic(
   const { message: logMessage, embed: messageToAuthor } =
     generatePrivateLogMessage(playersWithRoles);
 
-  await Promise.all([
-    handleDmError(interaction, failedDms, allUsers),
-    channelLog(interaction, logMessage),
-    interaction.user.send({
-      embeds: [messageToAuthor]
-    })
-  ]);
+  if (!isMocked) {
+    await Promise.all([
+      handleDmError(interaction, failedDms, allUsers),
+      channelLog(interaction, logMessage),
+      interaction.user.send({
+        embeds: [messageToAuthor]
+      })
+    ]);
+  }
 
   const response = generatePublicLogMessage(playersWithRoles, failedDms, failedNicknameChanges);
 
   if (interaction.channel && 'send' in interaction.channel) {
     try {
-      await interaction.channel.send({
-        embeds: [response]
-      });
+      if (!isMocked) {
+        await interaction.channel.send({
+          embeds: [response]
+        });
+      }
+
       await interaction.deleteReply();
 
       await startAssistant(playersWithRoles, interaction, interaction.user.id);
