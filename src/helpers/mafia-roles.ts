@@ -20,5 +20,5 @@ export const getMafiaRolesArray = (countOfPlayers: number): MafiaRole[] => {
 
   roles.push(...Array(countOfPlayers - roles.length).fill(MafiaRole.CITIZEN));
 
-  return shuffle(roles);
+  return shuffle(shuffle(roles));
 };

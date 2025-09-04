@@ -45,8 +45,8 @@ export default {
     if (!channel || channel.type !== ChannelType.GuildVoice)
       return handleError(interaction, t('errors.no-channel-or-not-voice'));
 
-    if (!interaction.memberPermissions?.has('Administrator') && channel?.id === config.channelId)
-      return handleError(interaction, t('errors.no-admin-role'));
+    // if (!interaction.memberPermissions?.has('Administrator') && channel?.id === config.channelId)
+    // return handleError(interaction, t('errors.no-admin-role'));
 
     const allUsers = channel.members
       .map(m => m.user)
