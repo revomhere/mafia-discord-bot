@@ -7,8 +7,6 @@ const config = {
   privateToken: process.env.PRIVATE_TOKEN || '',
 
   guildId: process.env.GUILD_ID || '',
-  channelId: process.env.CHANNEL_ID || '',
-  errorChannelId: process.env.ERROR_CHANNEL_ID || '',
 
   logGuildId: process.env.LOG_GUILD_ID || '',
   logChannelId: process.env.LOG_CHANNEL_ID || '',

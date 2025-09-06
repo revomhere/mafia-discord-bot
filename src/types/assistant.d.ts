@@ -1,9 +1,8 @@
 // every id is player number in game. example: 1, 2, 3, 4, 5, 6
 
-export interface PlayerState {
-  player: CompleteUser;
-  alive: boolean;
-}
+import { CompleteUser } from './users';
+
+export type PlayerState = CompleteUser | null;
 
 export interface Vote {
   from: number;
@@ -16,9 +15,9 @@ export interface VotingRound {
   eliminated?: number[];
 }
 
-export interface DayHistory {
-  nominations: number[];
-  votingRounds: VotingRound[];
+export interface DayActions {
+  nominations?: number[];
+  votingRounds?: VotingRound[];
 }
 
 export interface NightActions {
@@ -30,11 +29,6 @@ export interface NightActions {
 }
 
 export interface GameHistory {
-  days: DayHistory[];
+  days: DayActions[];
   nights: NightActions[];
 }
-
-export type RoleStep = {
-  roleName: string;
-  description: string;
-};

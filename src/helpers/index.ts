@@ -1,4 +1,4 @@
-export * from './host-assistant';
+export * from './hostAssistant';
 export * from './get-files';
 export * from './message-generator';
 export * from './utilities';

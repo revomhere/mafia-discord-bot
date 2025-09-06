@@ -3,7 +3,7 @@ import {
   generatePublicLogMessage,
   getMafiaRolesArray,
   changeNickname,
-  startAssistant,
+  runAssistant,
   handleDmError,
   handleError,
   channelLog,
@@ -22,14 +22,14 @@ import {
   MessageFlags,
   ButtonInteraction,
   InteractionCollector,
-  Collection,
-  TextBasedChannel
+  Collection
 } from 'discord.js';
 import { shuffle } from 'lodash-es';
 import config from '@/config';
 import { t } from '@/i18n';
 
 const { minPlayers, maxPlayers } = config;
+const isMocked = process.env.NODE_ENV === 'development';
 
 export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
@@ -39,14 +39,41 @@ export default {
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
 
+    if (isMocked) {
+      const guild = interaction.guild;
+      if (!guild) return;
+
+      const mockedUserIds = [
+        '664895051423285279',
+        '372383774937186315',
+        '573808316682076170',
+        '519070576330014720',
+        // '378499998267998213',
+        // '402466367321800704',
+        // '380728593485135874',
+        // '400612111161753601',
+        '573809642203774976'
+        // '437152386755198977',
+        // '1376169425782182021',
+      ];
+
+      const users = await Promise.all(
+        mockedUserIds.map(async id => {
+          const member = await guild.members.fetch(id);
+          return member?.user;
+        })
+      );
+
+      await startPreparingFlow(interaction, users);
+
+      return;
+    }
+
     const member = interaction.member as GuildMember;
     const channel = member?.voice?.channel;
 
     if (!channel || channel.type !== ChannelType.GuildVoice)
       return handleError(interaction, t('errors.no-channel-or-not-voice'));
-
-    // if (!interaction.memberPermissions?.has('Administrator') && channel?.id === config.channelId)
-    // return handleError(interaction, t('errors.no-admin-role'));
 
     const allUsers = channel.members
       .map(m => m.user)
@@ -67,8 +94,12 @@ function createPreparingButtons(allUsers: User[], excluded: Set<string>) {
   });
 
   const rows: ActionRowBuilder<ButtonBuilder>[] = [];
-  for (let i = 0; i < userButtons.length; i += 5) {
-    rows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(userButtons.slice(i, i + 5)));
+  for (let i = 0; i < userButtons.length; i += config.countOfPlayersInRow) {
+    rows.push(
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
+        userButtons.slice(i, i + config.countOfPlayersInRow)
+      )
+    );
   }
 
   const cancelButton = new ButtonBuilder()
@@ -236,7 +267,7 @@ async function runShuffleLogic(
 
       await interaction.deleteReply();
 
-      await startAssistant(playersWithRoles, interaction, interaction.user.id);
+      await runAssistant(playersWithRoles, interaction, interaction.user.id);
     } catch (e) {
       console.error('Error sending game start message:', e);
     }
@@ -248,5 +279,5 @@ async function runShuffleLogic(
     embeds: [response]
   });
 
-  await startAssistant(playersWithRoles, interaction, interaction.user.id);
+  await runAssistant(playersWithRoles, interaction, interaction.user.id);
 }
