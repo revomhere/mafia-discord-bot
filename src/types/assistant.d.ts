@@ -12,19 +12,21 @@ export interface Vote {
 export interface VotingRound {
   candidates: number[];
   votes: Vote[];
-  eliminated?: number[];
 }
 
 export interface DayActions {
-  nominations?: number[];
-  votingRounds?: VotingRound[];
+  nominations?: Vote[];
+  voting?: {
+    eliminated?: number[];
+    votes?: VotingRound[];
+  };
 }
 
 export interface NightActions {
-  mafiaKill?: number;
+  mafiaKill: number;
+  commissarCheck: number;
   maniacKill?: number;
   donCheck?: number;
-  commissarCheck?: number;
   doctorHeal?: number;
 }
 

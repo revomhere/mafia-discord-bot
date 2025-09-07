@@ -1,14 +1,22 @@
 import { MafiaRole } from '@/enums';
 import { t } from '@/i18n';
 import { PlayerState } from '@/types';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  Message,
+  MessageFlags
+} from 'discord.js';
 import { stopGame } from '.';
+import config from '@/config';
 
 export const startZeroNight = async (
   hostId: string,
   players: PlayerState[],
   message: Message
-): Promise<void> => {
+): Promise<boolean> => {
   const steps: string[] = [];
   let currentStepIndex = 0;
 
@@ -51,17 +59,17 @@ export const startZeroNight = async (
     components: createComponents()
   });
 
-  return new Promise<void>(resolve => {
+  return new Promise<boolean>(resolve => {
     const collector = message.createMessageComponentCollector({
       componentType: ComponentType.Button,
-      time: 5 * 60 * 1000
+      time: config.waitingTime * 1000
     });
 
     collector.on('collect', async i => {
       if (i.user.id !== hostId) {
         await i.reply({
           content: t('general.host-assistant.buttons-not-for-you'),
-          ephemeral: true
+          flags: MessageFlags.Ephemeral
         });
         return;
       }
@@ -71,7 +79,7 @@ export const startZeroNight = async (
           collector.stop('stopped');
           await i.update({ content: t('general.host-assistant.game-stopped'), components: [] });
           await stopGame(message);
-          resolve();
+          resolve(false);
           break;
 
         case 'back':
@@ -92,7 +100,7 @@ export const startZeroNight = async (
           } else {
             collector.stop('finished');
             await i.update({ content: t('general.host-assistant.finished'), components: [] });
-            resolve();
+            resolve(true);
           }
           break;
       }
@@ -104,7 +112,7 @@ export const startZeroNight = async (
           content: t('general.host-assistant.timeout'),
           components: []
         });
-        resolve();
+        resolve(false);
       }
     });
   });

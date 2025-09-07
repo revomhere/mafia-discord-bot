@@ -3,5 +3,6 @@
   "maxPlayers": 20,
   "countOfPlayersInRow": 5,
   "speakingTime": 60,
-  "additionalSpeakingTime": 30
+  "additionalSpeakingTime": 30,
+  "waitingTime": 600
 }

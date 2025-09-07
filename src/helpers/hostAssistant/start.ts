@@ -1,5 +1,12 @@
 import { t } from '@/i18n';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ComponentType,
+  Message,
+  MessageFlags
+} from 'discord.js';
 
 export const askToStartAssistant = async (hostId: string, message: Message): Promise<boolean> => {
   await message.edit({
@@ -28,7 +35,7 @@ export const askToStartAssistant = async (hostId: string, message: Message): Pro
       if (i.user.id !== hostId) {
         return i.reply({
           content: t('general.host-assistant.buttons-not-for-you'),
-          ephemeral: true
+          flags: MessageFlags.Ephemeral
         });
       }
 

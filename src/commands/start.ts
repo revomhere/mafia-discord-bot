@@ -35,7 +35,7 @@ export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
 
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
 
@@ -135,7 +135,7 @@ function showInitialPreparingUI(
 function createPreparingCollector(message: any, userId: string) {
   return message.createMessageComponentCollector({
     componentType: ComponentType.Button,
-    time: 5 * 60 * 1000,
+    time: config.waitingTime * 1000,
     filter: (i: ButtonInteraction) => i.user.id === userId
   });
 }
