@@ -45,7 +45,7 @@
       "maniac-description": "Ти — **Маніяк**. Твоя ціль — вбити всіх інших гравців, незалежно від їх ролей. Ти дієш самостійно і не маєш союзників. Обережно балансуй між нападом і приховуванням, щоб залишитись останнім живим та виграти гру."
     },
     "mafia_rules": {
-      "title": "🎭 Правила Мафії — Офіс Нотевського",
+      "title": "🎭 Правила Мафії",
       "roles": {
         "title": "🎲 Ролі",
         "mafia": "{{emoji}} **Мафія** — жестами вночі домовляється, кого вбити.",
@@ -133,7 +133,7 @@
       "maniac-description": "You are the **Maniac**. Your goal is to kill all other players, regardless of their roles. You work alone with no allies. Balance your attacks and concealment carefully to be the last player alive and claim victory."
     },
     "mafia_rules": {
-      "title": "🎭 Mafia Rules — Notevskyi Office",
+      "title": "🎭 Mafia Rules",
       "roles": {
         "title": "🎲 Roles",
         "mafia": "{{emoji}} **Mafia** — communicates at night using gestures to agree on a target to kill.",

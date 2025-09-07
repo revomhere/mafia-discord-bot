@@ -1,7 +1,7 @@
 {
   "name": "mafia-discord-bot",
   "version": "1.0.0",
-  "description": "Notevsky Mafia Discord Bot",
+  "description": "Mafia Discord Bot",
   "main": "index.js",
   "type": "module",
   "scripts": {

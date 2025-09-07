@@ -38,7 +38,7 @@
       }
     },
     "rules": {
-      "description": "Правила гри в Мафію для Спільноти Офісу Нотевського."
+      "description": "Правила гри в Мафію."
     }
   },
   "en": {
@@ -80,7 +80,7 @@
       }
     },
     "rules": {
-      "description": "Rules for Mafia game for Notevsky Office Community."
+      "description": "Rules for Mafia game."
     }
   }
 }
