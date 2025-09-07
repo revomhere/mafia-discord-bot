@@ -15,10 +15,6 @@ export const runAssistant = async (
   interaction: ChatInputCommandInteraction,
   hostId: string
 ) => {
-  // TODO: remove when assistant is ready
-  const isMocked = process.env.NODE_ENV === 'development';
-  if (!isMocked) return;
-
   const message = await interaction.followUp({ content: '⏳', fetchReply: true });
 
   const isAssistantNeeded = await askToStartAssistant(hostId, message);
