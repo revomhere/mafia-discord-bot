@@ -18,14 +18,16 @@ export const startDay = async (
   firstSpeaker: number,
   isZeroDay?: boolean
 ): Promise<DayActions> => {
-  const order = [...gameState.slice(firstSpeaker), ...gameState.slice(0, firstSpeaker)];
+  const order = [...gameState.keys()]
+    .slice(firstSpeaker)
+    .concat([...gameState.keys()].slice(0, firstSpeaker));
+
   const nominatedList: Vote[] = [];
 
-  // Each player speech
-  for (let idx = 0; idx < order.length; idx++) {
+  for (const globalIdx of order) {
     const nominated = await turnPlayer(
       hostId,
-      idx,
+      globalIdx,
       message,
       'general.host-assistant.speaking',
       config.speakingTime,
@@ -33,48 +35,16 @@ export const startDay = async (
       nominatedList.map(item => item.to),
       !isZeroDay
     );
-    if (typeof nominated === 'number') nominatedList.push({ from: idx, to: nominated });
+    if (typeof nominated === 'number') {
+      nominatedList.push({ from: globalIdx, to: nominated });
+    }
   }
 
-  // TODO: here code is duplicated as in the end of function
-  // TODO: this shows also when game is actually over. have to figure out a way around
   if (isZeroDay) {
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId('next')
-        .setLabel(t('general.host-assistant.btn-next'))
-        .setStyle(ButtonStyle.Success)
-    );
-
-    await message.edit({
-      content: '🌙 Місто засинає.',
-      components: [row]
-    });
-
-    await new Promise<void>(resolve => {
-      const collector = message.createMessageComponentCollector({
-        componentType: ComponentType.Button,
-        max: 1
-      });
-
-      collector.on('collect', async i => {
-        if (i.user.id !== hostId) {
-          await i.reply({
-            content: t('general.host-assistant.buttons-not-for-you'),
-            flags: MessageFlags.Ephemeral
-          });
-          return;
-        }
-        await i.deferUpdate();
-        collector.stop();
-        resolve();
-      });
-    });
-
+    await waitForNext(hostId, message, '🌙 Місто засинає.');
     return {};
   }
 
-  // Justification speechs
   for (const nomination of nominatedList) {
     await turnPlayer(
       hostId,
@@ -86,22 +56,6 @@ export const startDay = async (
     );
   }
 
-  /* TODO: finish voting section probably
-  // At the beginning, everyone voted for noone (-1)
-  // If someone is voted for noone, their vote will be counted for last nominated player
-  const votingRounds: VotingRound[] = [];
-
-  const voting: Record<number, number> = {};
-  const playersAlive = gameState.filter(p => !!p);
-
-  playersAlive.forEach((p, idx) => {
-    voting[idx] = -1;
-  });
-
-  // Voting
-  for (const idx of Object.values(nominatedList)) {
-  }*/
-
   const killed = await selectKilledPlayer(
     hostId,
     message,
@@ -109,6 +63,17 @@ export const startDay = async (
     nominatedList.map(i => i.to)
   );
 
+  await waitForNext(hostId, message, '🌙 Місто засинає.');
+
+  return {
+    nominations: nominatedList,
+    voting: {
+      eliminated: killed ? [killed] : []
+    }
+  };
+};
+
+const waitForNext = async (hostId: string, message: Message, text: string) => {
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId('next')
@@ -117,7 +82,7 @@ export const startDay = async (
   );
 
   await message.edit({
-    content: '🌙 Місто засинає.',
+    content: text,
     components: [row]
   });
 
@@ -140,13 +105,6 @@ export const startDay = async (
       resolve();
     });
   });
-
-  return {
-    nominations: nominatedList,
-    voting: {
-      eliminated: killed ? [killed] : []
-    }
-  };
 };
 
 const turnPlayer = async (
@@ -229,9 +187,7 @@ const turnPlayer = async (
             timer = null;
           }
           isPaused = true;
-
           await updateMessage();
-
           break;
         case 'resume':
           if (!timer && remaining > 0) {
@@ -245,7 +201,6 @@ const turnPlayer = async (
                 await updateMessage();
               }
             }, 1000);
-
             isPaused = false;
           }
           break;
@@ -257,7 +212,6 @@ const turnPlayer = async (
           if (interaction.customId.startsWith('nominate_')) {
             const idx = Number(interaction.customId.split('_')[1]);
             nominated = nominated === idx ? undefined : idx;
-
             await updateMessage();
           }
           break;
@@ -320,8 +274,8 @@ const getSpeakingUi = (opts: {
     rows.push(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         playersAlive.slice(i, i + config.countOfPlayersInRow).map((p, idx) => {
-          const isOnVote = opts.alreadyOnVote?.includes(idx);
-          const playerIdx = opts.gameState?.findIndex(pl => pl?.player?.id === p?.player?.id) || 0;
+          const playerIdx = opts.gameState?.findIndex(pl => pl?.player?.id === p?.player?.id) ?? -1;
+          const isOnVote = opts.alreadyOnVote?.includes(playerIdx);
           return new ButtonBuilder()
             .setCustomId(`nominate_${playerIdx}`)
             .setLabel(`[${playerIdx + 1}] ${p.player.username}`)
@@ -350,7 +304,6 @@ const selectKilledPlayer = async (
   let killed: number | undefined;
 
   const updateMessage = async () => {
-    // TODO: find a way around
     const playersToVoteState = gameState.map((p, idx) => (candidates.includes(idx) ? p : null));
 
     await message.edit({

@@ -38,8 +38,8 @@ export const runAssistant = async (
 
   let currentFirstSpeaker = -1;
 
-  // const isContinue = await startZeroNight(hostId, gameState, message);
-  // if (!isContinue) return;
+  const isContinue = await startZeroNight(hostId, gameState, message);
+  if (!isContinue) return;
 
   while (true) {
     currentFirstSpeaker = setCurrentSpeaker(currentFirstSpeaker, gameState);
