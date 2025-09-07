@@ -19,7 +19,7 @@ const getLogChannel = async (interaction: ChatInputCommandInteraction) => {
   return channel;
 };
 
-export const channelLog = async (interaction: ChatInputCommandInteraction, message: string) => {
+export const logToChannel = async (interaction: ChatInputCommandInteraction, message: string) => {
   const channel = await getLogChannel(interaction);
 
   if (!channel) return;

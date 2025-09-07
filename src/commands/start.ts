@@ -6,7 +6,7 @@ import {
   runAssistant,
   handleDmError,
   handleError,
-  channelLog,
+  logToChannel,
   dmRole
 } from '@/helpers';
 import {
@@ -251,7 +251,7 @@ async function runShuffleLogic(
 
   await Promise.all([
     handleDmError(interaction, failedDms, allUsers),
-    channelLog(interaction, logMessage),
+    logToChannel(interaction, logMessage),
     interaction.user.send({
       embeds: [messageToAuthor]
     })
