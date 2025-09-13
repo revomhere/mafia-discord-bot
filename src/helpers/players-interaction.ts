@@ -13,6 +13,7 @@ import {
 import { generateDmMessage, getNicknameNumber } from './';
 import { CompleteUser } from '@/types';
 import { t } from '@/i18n';
+import { MafiaRole } from '@/enums';
 
 // returns user if failed to send DM
 export const dmRole = async (interaction: ChatInputCommandInteraction, user: CompleteUser) => {

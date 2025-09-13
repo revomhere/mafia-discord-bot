@@ -1,19 +1,20 @@
-import { MafiaRole, roleColors, roleDescriptions, roleEmojis, roleNames } from '@/enums';
 import { EmbedBuilder, User } from 'discord.js';
 import { t } from '@/i18n';
-import { CompleteUser } from '@/types';
+import { CompleteUser, Role } from '@/types';
 import { getNicknameNumber } from './';
+import { generalRolesMetadata } from '@/enums';
 
-export const generateDmMessage = (role: MafiaRole, author: string) => {
+export const generateDmMessage = (role: Role, author: string) => {
+  const data = generalRolesMetadata[role];
   return new EmbedBuilder()
     .setTitle(
       t('commands.start.dm.title', {
-        emoji: roleEmojis[role],
-        role: roleNames[role]
+        emoji: data.emoji,
+        role: data.name
       })
     )
-    .setDescription(roleDescriptions[role])
-    .setColor(roleColors[role])
+    .setDescription(data.description)
+    .setColor(data.color)
     .setFooter({
       text: t('commands.start.dm.footer', {
         time: new Date().toLocaleTimeString('uk-UA', {
@@ -32,15 +33,8 @@ export const generateDmMessage = (role: MafiaRole, author: string) => {
 export const generatePrivateLogMessage = (playersWithRoles: CompleteUser[]) => {
   const message = playersWithRoles
     .map((user, idx) => {
-      return (
-        roleEmojis[user.role] +
-        ' ' +
-        roleNames[user.role] +
-        ' ' +
-        getNicknameNumber(idx + 1) +
-        ' - ' +
-        `${user.player.username}`
-      );
+      const data = generalRolesMetadata[user.role];
+      return `${data.emoji} ${data.name} ${getNicknameNumber(idx + 1)} - ${user.player.username}`;
     })
     .join('\n');
 
@@ -54,23 +48,18 @@ export const generatePrivateLogMessage = (playersWithRoles: CompleteUser[]) => {
 
 export const generatePublicLogMessage = (
   playersWithRoles: CompleteUser[],
-  failedDms: {
-    user: User;
-    embedMessage: EmbedBuilder;
-  }[],
+  failedDms: { user: User; embedMessage: EmbedBuilder }[],
   failedNicknameChanges: User[]
 ) => {
   const message =
     t('commands.start.result.description') +
-    failedDms.map(
-      user => '\n' + t('commands.start.result.failed-dm', { user: user?.user?.username })
-    ) +
+    failedDms.map(u => '\n' + t('commands.start.result.failed-dm', { user: u.user.username })) +
     failedNicknameChanges.map(
       user =>
         '\n' +
         t('commands.start.result.failed-nickname', {
-          user: `${user?.username}`,
-          nickname: getNicknameNumber(playersWithRoles.findIndex(u => u.player.id === user?.id) + 1)
+          user: user.username,
+          nickname: getNicknameNumber(playersWithRoles.findIndex(u => u.player.id === user.id) + 1)
         })
     ) +
     '\n\n' +

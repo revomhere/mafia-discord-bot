@@ -86,6 +86,28 @@
           "Маніяк обирає одного гравця, якого вбиває."
         ]
       }
+    },
+    "vampire": {
+      "roles": {
+        "dracula": "Дракула",
+        "dracula-description": "Ти — **Дракула**. Щоночі ти можеш вкусити одного гравця, щоб перетворити його на вампіра. Темна команда перемагає, якщо кількість вампірів дорівнює або перевищує кількість світлих.",
+        "vanHelsing": "Ван Гелсінг",
+        "vanHelsing-description": "Ти — **Ван Гелсінг**. Щоночі ти називаєш одного гравця: якщо це вампір — він помирає. Ця властивість не діє на Дракулу. Один раз можеш пережити укус Дракули без перетворення, але втрачаєш здатність убивати вампірів.",
+        "tomSawyer": "Том Сойєр",
+        "tomSawyer-description": "Ти — **Том Сойєр**. Сироватка на тебе не діє. Маєш базову силу дуелі +1, і з кожною дуеллю сила зростає ще на +1.",
+        "phoenix": "Фенікс",
+        "phoenix-description": "Ти — **Фенікс**. Якщо тебе кусає Дракула, ти помираєш на один день і ніч, а потім воскресаєш і граєш далі за світлих. Наступні укуси повторюють цей ефект. Вбивці вбивають тебе назавжди.",
+        "golem": "Голем",
+        "golem-description": "Ти — **Голем**. Не перетворюєшся, якщо тебе кусає Дракула. Після цього Дракула наступної ночі не може нікого вкусити (зуби болять!).",
+        "ghost": "Привид",
+        "ghost-description": "Ти — **Привид**. Якщо тебе кусає Дракула, ти стаєш безсмертним до кінця гри, але не можеш більше говорити. Якщо скажеш хоч слово — помираєш одразу.",
+        "invisible": "Невидимка",
+        "invisible-description": "Ти — **Невидимка**. Один раз за гру переживаєш сироватку незалежно від команди. Усі перевірки від інших гравців не працюють.",
+        "witch": "Відьма",
+        "witch-description": "Ти — **Відьма**. Граєш за світлих, але якщо тебе вкусить Дракула, результат наступного голосування скасовується.",
+        "citizen": "Мирний житель",
+        "citizen-description": "Ти — **Мирний житель**. Не маєш спеціальних здібностей, твоя мета — вижити та допомогти світлим перемогти вампірів."
+      }
     }
   },
   "en": {
@@ -176,6 +198,28 @@
           "The Doctor selects one player to heal (cannot heal the same player two nights in a row).",
           "The Maniac selects one player to kill."
         ]
+      }
+    },
+    "vampire": {
+      "roles": {
+        "dracula": "Dracula",
+        "dracula-description": "You are **Dracula**. Each night you may bite one player to turn them into a vampire. The dark team wins if the number of vampires equals or exceeds the number of light players.",
+        "vanHelsing": "Van Helsing",
+        "vanHelsing-description": "You are **Van Helsing**. Each night you name one player: if they are a vampire — they die. This ability does not affect Dracula. Once, you can survive Dracula's bite without turning but you lose your ability to kill vampires.",
+        "tomSawyer": "Tom Sawyer",
+        "tomSawyer-description": "You are **Tom Sawyer**. The serum does not affect you. You have base duel power +1, and with each duel your power increases by +1.",
+        "phoenix": "Phoenix",
+        "phoenix-description": "You are **Phoenix**. If Dracula bites you, you die for one day and night and then resurrect to continue playing for the light team. Subsequent bites repeat this effect. Killers kill you permanently.",
+        "golem": "Golem",
+        "golem-description": "You are **Golem**. You do not turn if bitten by Dracula. After this, Dracula cannot bite anyone the following night (his teeth hurt!).",
+        "ghost": "Ghost",
+        "ghost-description": "You are **Ghost**. If Dracula bites you, you become immortal until the end of the game but you can no longer speak. If you say even one word — you die instantly.",
+        "invisible": "Invisible",
+        "invisible-description": "You are **Invisible**. Once per game you survive the serum regardless of team. All checks from other players do not work on you.",
+        "witch": "Witch",
+        "witch-description": "You are **Witch**. You play for the light team, but if Dracula bites you, the result of the next vote is cancelled.",
+        "citizen": "Citizen",
+        "citizen-description": "You are **Citizen**. You have no special abilities; your goal is to survive and help the light team defeat the vampires."
       }
     }
   }
