@@ -29,10 +29,10 @@ export const getVampireRolesArray = (countOfPlayers: number): VampireMafiaRole[]
     VampireMafiaRole.VAN_HELSING,
     VampireMafiaRole.TOM_SAWYER,
     VampireMafiaRole.PHOENIX,
-    VampireMafiaRole.GOLEM,
-    VampireMafiaRole.GHOST,
     VampireMafiaRole.INVISIBLE,
-    VampireMafiaRole.WITCH
+    VampireMafiaRole.WITCH,
+    VampireMafiaRole.GOLEM,
+    VampireMafiaRole.GHOST
   ];
 
   const roles: VampireMafiaRole[] = specialRoles.slice(
