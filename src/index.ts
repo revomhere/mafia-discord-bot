@@ -34,6 +34,14 @@ client.on(Events.InteractionCreate, interaction => {
 
   const command = client.commands?.get(interaction.commandName);
 
+  if (command?.data.name === 'rules') {
+    interaction.reply({
+      content: 'Ця команда тимчасово заборонена'
+    });
+
+    return;
+  }
+
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);
     return;
