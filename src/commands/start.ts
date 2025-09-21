@@ -29,7 +29,7 @@ import config from '@/config';
 import { t } from '@/i18n';
 
 const { minPlayers, maxPlayers } = config;
-const isMocked = process.env.NODE_ENV === 'development';
+// const isMocked = process.env.NODE_ENV === 'development';
 
 export default {
   data: new SlashCommandBuilder().setDescription(t('commands.start.description')),
@@ -39,35 +39,35 @@ export default {
 
     if (!interaction.inGuild()) return handleError(interaction, t('errors.not-in-guild'));
 
-    if (isMocked) {
-      const guild = interaction.guild;
-      if (!guild) return;
+    // if (isMocked) {
+    //   const guild = interaction.guild;
+    //   if (!guild) return;
 
-      const mockedUserIds = [
-        // '664895051423285279',
-        '372383774937186315',
-        '573808316682076170',
-        '519070576330014720',
-        '378499998267998213',
-        // '402466367321800704',
-        // '380728593485135874',
-        // '400612111161753601',
-        '573809642203774976'
-        // '437152386755198977',
-        // '1376169425782182021',
-      ];
+    //   const mockedUserIds = [
+    //     // '664895051423285279',
+    //     '372383774937186315',
+    //     '573808316682076170',
+    //     '519070576330014720',
+    //     '378499998267998213',
+    //     // '402466367321800704',
+    //     // '380728593485135874',
+    //     // '400612111161753601',
+    //     '573809642203774976'
+    //     // '437152386755198977',
+    //     // '1376169425782182021',
+    //   ];
 
-      const users = await Promise.all(
-        mockedUserIds.map(async id => {
-          const member = await guild.members.fetch(id);
-          return member?.user;
-        })
-      );
+    //   const users = await Promise.all(
+    //     mockedUserIds.map(async id => {
+    //       const member = await guild.members.fetch(id);
+    //       return member?.user;
+    //     })
+    //   );
 
-      await startPreparingFlow(interaction, users);
+    //   await startPreparingFlow(interaction, users);
 
-      return;
-    }
+    //   return;
+    // }
 
     const member = interaction.member as GuildMember;
     const channel = member?.voice?.channel;
